@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Qt_platformer
+TARGET = Qt_game
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -26,9 +26,13 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
+        player.cpp \
+        scene_base.cpp \
         widget.cpp
 
 HEADERS += \
+        player.h \
+        scene_base.h \
         widget.h
 
 FORMS += \
