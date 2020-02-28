@@ -24,19 +24,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+INCLUDEPATH += $$PWD/src
+DEPENDPATH += $$PWD/src
+
 SOURCES += \
-        main.cpp \
-        player.cpp \
-        scene_base.cpp \
-        widget.cpp
+        src/main.cpp \
+        src/player.cpp \
+        src/scene_base.cpp \
+        src/widget.cpp
 
 HEADERS += \
-        player.h \
-        scene_base.h \
-        widget.h
+        src/player.h \
+        src/scene_base.h \
+        src/widget.h
 
 FORMS += \
-        widget.ui
+        src/widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

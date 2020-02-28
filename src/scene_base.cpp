@@ -1,43 +1,43 @@
 #include "scene_base.h"
 
-Scene_base::Scene_base() : QGraphicsScene (){
-    setSceneRect(0, 0, 1280, 720);
+SceneBase::SceneBase() : QGraphicsScene () {
+  setSceneRect(0, 0, 1280, 720);
 
-    SetField();
+  SetField();
 }
 
-void Scene_base::timerEvent(QTimerEvent *event) {
-    player_->NextFrame();
+void SceneBase::timerEvent(QTimerEvent *event) {
+  player_->NextFrame();
 }
 
-void Scene_base::keyPressEvent(QKeyEvent *event) {
-    switch (event->key()){
-    case Qt::Key_Right:
-        player_->derect_ = RIGHT;
-        break;
+void SceneBase::keyPressEvent(QKeyEvent *event) {
+  switch (event->key()){
+  case Qt::Key_Right:
+    player_->direction_ = RIGHT;
+    break;
 
-    case Qt::Key_Left:
-        player_->derect_ = LEFT;
-        break;
+  case Qt::Key_Left:
+    player_->direction_ = LEFT;
+    break;
 
-    case Qt::Key_Up:
-        player_->derect_ = UP;
-        break;
+  case Qt::Key_Up:
+    player_->direction_ = UP;
+    break;
 
-    case Qt::Key_Down:
-        player_->derect_ = DOWN;
-        break;
+  case Qt::Key_Down:
+    player_->direction_ = DOWN;
+    break;
 
-    default:
-        break;
-    }
+  default:
+    break;
+  }
 }
 
-void Scene_base::keyReleaseEvent(QKeyEvent *event) {
-    player_->derect_ = STAY;
+void SceneBase::keyReleaseEvent(QKeyEvent *event) {
+    player_->direction_ = STAY;
 }
 
-void Scene_base::SetField() {
+void SceneBase::SetField() {
     startTimer(10);
 
     player_ = new Player;

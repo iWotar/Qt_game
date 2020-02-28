@@ -4,19 +4,15 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+  QApplication application(argc, argv);
 
-    Scene_base* test = new Scene_base;
-    QGraphicsView* view = new QGraphicsView(test);
+  SceneBase* test = new SceneBase;
+  QGraphicsView* view = new QGraphicsView(test);
 
+  view->setFixedSize(QSize(1280, 720));
+  view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  view->show();
 
-
-    view->setFixedSize(QSize(1280, 720));
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->show();
-
-
-
-    return a.exec();
+  return application.exec();
 }

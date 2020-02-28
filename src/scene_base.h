@@ -3,20 +3,20 @@
 
 #include <QGraphicsScene>
 #include <QKeyEvent>
-#include <QGraphicsView>
 #include "player.h"
 
-class Scene_base : public QGraphicsScene {
-    Q_OBJECT
-public:
-    Scene_base();
-    void timerEvent (QTimerEvent* event);
-    void keyPressEvent (QKeyEvent* event);
-    void keyReleaseEvent(QKeyEvent *event);
+class SceneBase : public QGraphicsScene {
+  Q_OBJECT
 
-private:
-    void SetField();
-    Player* player_;
+ public:
+  SceneBase();
+  void timerEvent (QTimerEvent* event) override;
+  void keyPressEvent (QKeyEvent* event) override;
+  void keyReleaseEvent(QKeyEvent *event) override;
+
+ private:
+  void SetField();
+  Player* player_;
 };
 
 #endif // SCENE_BASE_H
