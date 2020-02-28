@@ -15,7 +15,7 @@ class SceneBase : public QGraphicsScene {
   void keyReleaseEvent(QKeyEvent *event) override;
 
  private:
-  void SetField();
+  void SetupField();
   Player* player_;
 };
 

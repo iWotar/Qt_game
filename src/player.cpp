@@ -3,21 +3,21 @@
 Player::Player() {
   setRect(0, 0, 20, 50);
 
-  direction_ = STAY;
+  direction_ = Directions::STAY;
 }
 
 void Player::NextFrame() {
   switch (direction_) {
-  case UP:
+  case Directions::UP:
     setPos(x(), y() - speed_);
     break;
-  case DOWN:
+  case Directions::DOWN:
     setPos(x(), y() + speed_);
     break;
-  case RIGHT:
+  case Directions::RIGHT:
     setPos(x() + speed_, y());
     break;
-  case LEFT:
+  case Directions::LEFT:
     setPos(x() - speed_, y());
     break;
   default:

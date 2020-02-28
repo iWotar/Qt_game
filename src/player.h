@@ -3,7 +3,7 @@
 
 #include <QGraphicsRectItem>
 
-enum Directions {UP, DOWN, RIGHT, LEFT, STAY};
+enum class Directions {UP, DOWN, RIGHT, LEFT, STAY};
 
 class Player : public QGraphicsRectItem {
 
