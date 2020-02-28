@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Qt_platformer
+TARGET = Qt_game
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -24,15 +24,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+INCLUDEPATH += $$PWD/src
+DEPENDPATH += $$PWD/src
+
 SOURCES += \
-        main.cpp \
-        widget.cpp
+        src/main.cpp \
+        src/player.cpp \
+        src/scene_base.cpp \
+        src/widget.cpp
 
 HEADERS += \
-        widget.h
+        src/player.h \
+        src/scene_base.h \
+        src/widget.h
 
 FORMS += \
-        widget.ui
+        src/widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

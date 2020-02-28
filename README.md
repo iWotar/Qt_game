@@ -1,4 +1,4 @@
-# QT_Platformer
+# QT_Game
 ## Description
 
-Very Cool Game
+

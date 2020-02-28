@@ -1,11 +1,17 @@
-#include "widget.h"
+#include "scene_base.h"
 #include <QApplication>
+#include <QGraphicsView>
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    Widget w;
-    w.show();
+int main(int argc, char *argv[]) {
+  QApplication application(argc, argv);
 
-    return a.exec();
+  SceneBase* test = new SceneBase;
+  QGraphicsView* view = new QGraphicsView(test);
+
+  view->setFixedSize(QSize(1280, 720));
+  view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  view->show();
+
+  return application.exec();
 }
