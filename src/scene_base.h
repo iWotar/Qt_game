@@ -10,8 +10,8 @@ class SceneBase : public QGraphicsScene {
 
  public:
   SceneBase();
-  void timerEvent (QTimerEvent* event) override;
-  void keyPressEvent (QKeyEvent* event) override;
+  void timerEvent(QTimerEvent* event) override;
+  void keyPressEvent(QKeyEvent* event) override;
   void keyReleaseEvent(QKeyEvent *event) override;
 
  private:
@@ -19,4 +19,4 @@ class SceneBase : public QGraphicsScene {
   Player* player_;
 };
 
-#endif // SCENE_BASE_H
+#endif  // SCENE_BASE_H

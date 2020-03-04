@@ -18,4 +18,4 @@ class Widget : public QWidget {
   Ui::Widget *ui;
 };
 
-#endif // WIDGET_H
+#endif  // WIDGET_H

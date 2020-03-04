@@ -6,7 +6,6 @@
 enum class Directions {UP, DOWN, RIGHT, LEFT, STAY};
 
 class Player : public QGraphicsRectItem {
-
  public:
   Player();
   void NextFrame();
@@ -17,4 +16,4 @@ class Player : public QGraphicsRectItem {
   int speed_ = 5;
 };
 
-#endif // PLAYER_H
+#endif  // PLAYER_H

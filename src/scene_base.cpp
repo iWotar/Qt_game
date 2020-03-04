@@ -1,6 +1,6 @@
 #include "scene_base.h"
 
-SceneBase::SceneBase() : QGraphicsScene () {
+SceneBase::SceneBase() : QGraphicsScene() {
   setSceneRect(0, 0, 1280, 720);
 
   SetupField();
@@ -11,7 +11,7 @@ void SceneBase::timerEvent(QTimerEvent *event) {
 }
 
 void SceneBase::keyPressEvent(QKeyEvent *event) {
-  switch (event->key()){
+  switch (event->key()) {
   case Qt::Key_Right:
     player_->direction_ = Directions::RIGHT;
     break;
