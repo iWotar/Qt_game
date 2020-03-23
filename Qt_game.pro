@@ -28,12 +28,18 @@ INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 
 SOURCES += \
+        src/gameview.cpp \
         src/main.cpp \
+        src/mainmenu.cpp \
+        src/pixmapbutton.cpp \
         src/player.cpp \
         src/scene_base.cpp \
         src/widget.cpp
 
 HEADERS += \
+        src/gameview.h \
+        src/mainmenu.h \
+        src/pixmapbutton.h \
         src/player.h \
         src/scene_base.h \
         src/widget.h
@@ -45,3 +51,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res/res.qrc
