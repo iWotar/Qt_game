@@ -1,6 +1,5 @@
 #ifndef GAMEVIEW_H
 #define GAMEVIEW_H
-
 #include <QApplication>
 #include <QGraphicsView>
 #include <QResizeEvent>

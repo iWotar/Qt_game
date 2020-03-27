@@ -43,3 +43,4 @@ void MainMenu::keyPressEvent(QKeyEvent* event) {
       break;
   }
 }
+

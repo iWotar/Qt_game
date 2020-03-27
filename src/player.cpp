@@ -34,8 +34,28 @@ void Player::NextFrame() {
 }
 
 int Player::GetSpeed() const {
-  return speed_;
+    return speed_;
 }
+
+int Player::GetHealth() const {
+    return health_;
+}
+
+QVector2D Player::GetDirectionVector() {
+    switch (direction_) {
+    case Directions::UP :
+        return QVector2D(0, -speed_);
+    case Directions::DOWN :
+        return QVector2D(0, speed_);
+    case Directions::LEFT :
+        return QVector2D(-speed_, 0);
+    case Directions::RIGHT :
+        return QVector2D(speed_, 0);
+    case Directions::STAY :
+        return  QVector2D();
+    }
+}
+
 
 int Player::Width() const {
   return width_;
@@ -50,4 +70,8 @@ void Player::SetSize(const QSize& size) {
 
   width_ = size.width();
   height_ = size.height();
+}
+
+void Player::SetHealth(int hp) {
+    health_ = hp;
 }

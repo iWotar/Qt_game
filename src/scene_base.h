@@ -9,6 +9,7 @@
 #include <QScrollBar>
 
 #include "player.h"
+#include "enemy.h"
 
 class SceneBase : public QGraphicsScene {
   Q_OBJECT
@@ -31,6 +32,7 @@ class SceneBase : public QGraphicsScene {
   void SetupField();
 
   Player* player_;
+  QList<Enemy*> enemies_;
 
   QScrollBar* scroll_v_;
   QScrollBar* scroll_h_;

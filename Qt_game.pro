@@ -28,6 +28,7 @@ INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 
 SOURCES += \
+        src/enemy.cpp \
         src/gameview.cpp \
         src/main.cpp \
         src/mainmenu.cpp \
@@ -37,6 +38,7 @@ SOURCES += \
         src/widget.cpp
 
 HEADERS += \
+        src/enemy.h \
         src/gameview.h \
         src/mainmenu.h \
         src/pixmapbutton.h \
@@ -54,3 +56,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     res/res.qrc
+

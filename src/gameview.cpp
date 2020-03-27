@@ -29,7 +29,6 @@ void GameView::resizeEvent(QResizeEvent* event) {
 
 void GameView::OpenLocation() {
   cur_scene_ = Scene::DEV_LOCATION;
-
   setScene(dev_location_);
   dev_location_->SetPaused(false);
   Player* player = dev_location_->GetPlayer();

@@ -1,4 +1,5 @@
 #include "scene_base.h"
+#include "enemy.h"
 
 SceneBase::SceneBase() : QGraphicsScene(), paused_(false) {
   setSceneRect(0, 0, 3000, 3000);
@@ -22,6 +23,9 @@ void SceneBase::timerEvent(QTimerEvent* event) {
   }
 
   player_->NextFrame();
+  for (auto e : enemies_) {
+      e->NextFrame();
+  }
 
   // Скроллинг экрана
   if (!views().empty())
@@ -70,4 +74,9 @@ void SceneBase::SetupField() {
   player_ = new Player;
   player_->setPos(1500, 1500);
   addItem(player_);
+
+  Enemy* enemy_ = new Enemy(this);
+  enemy_->setPos(1800, 1500);
+  enemies_.append(enemy_);
+  addItem(enemy_);
 }
