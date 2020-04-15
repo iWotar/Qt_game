@@ -8,8 +8,8 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
-#include "player.h"
 #include "enemy.h"
+#include "player.h"
 
 class SceneBase : public QGraphicsScene {
   Q_OBJECT
@@ -18,12 +18,15 @@ class SceneBase : public QGraphicsScene {
   SceneBase();
 
   void SetPaused(bool state);
+  bool IsPaused() const;
 
-  Player* GetPlayer();
+  Player* GetPlayer() const;
 
   void timerEvent(QTimerEvent* event) override;
   void keyPressEvent(QKeyEvent* event) override;
   void keyReleaseEvent(QKeyEvent* event) override;
+
+  void wheelEvent(QGraphicsSceneWheelEvent* event) override;
 
  signals:
   void SceneIsPaused();
@@ -32,7 +35,7 @@ class SceneBase : public QGraphicsScene {
   void SetupField();
 
   Player* player_;
-  QList<Enemy*> enemies_;
+  QVector<Enemy*> enemies_;
 
   QScrollBar* scroll_v_;
   QScrollBar* scroll_h_;

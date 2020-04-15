@@ -1,5 +1,7 @@
 #include "mainmenu.h"
 
+#include <QGraphicsSceneWheelEvent>
+
 MainMenu::MainMenu() : QGraphicsScene() {
   setSceneRect(0, 0, 1000, 1000);
 
@@ -19,8 +21,8 @@ void MainMenu::Resize() {
   view->horizontalScrollBar()->setValue(1);
   view->verticalScrollBar()->setValue(1);
 
-  int w = view->width();
-  int h = view->height();
+  int32_t w = view->width();
+  int32_t h = view->height();
 
   btn_begin_->Resize(w / 4 * 2, h / 5);
   btn_begin_->setPos(w / 4, h / 5 * 2);
@@ -44,3 +46,4 @@ void MainMenu::keyPressEvent(QKeyEvent* event) {
   }
 }
 
+void MainMenu::wheelEvent(QGraphicsSceneWheelEvent* event) { event->accept(); }

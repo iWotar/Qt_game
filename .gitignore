@@ -1,2 +1,7 @@
 build*/
 *.user
+*.bmp
+*.png
+*.jpg
+*.swp
+todo

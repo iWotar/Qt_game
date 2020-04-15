@@ -1,5 +1,10 @@
 #include "scene_base.h"
+
+#include <QGraphicsSceneWheelEvent>
+
+#include "collisionrect.h"
 #include "enemy.h"
+#include "environment.h"
 
 SceneBase::SceneBase() : QGraphicsScene(), paused_(false) {
   setSceneRect(0, 0, 3000, 3000);
@@ -11,9 +16,9 @@ void SceneBase::SetPaused(bool state) {
   player_->direction_ = Directions::STAY;
 }
 
-Player *SceneBase::GetPlayer() {
-  return player_;
-}
+bool SceneBase::IsPaused() const { return paused_; }
+
+Player* SceneBase::GetPlayer() const { return player_; }
 
 void SceneBase::timerEvent(QTimerEvent* event) {
   Q_UNUSED(event);
@@ -24,7 +29,7 @@ void SceneBase::timerEvent(QTimerEvent* event) {
 
   player_->NextFrame();
   for (auto e : enemies_) {
-      e->NextFrame();
+    e->NextFrame();
   }
 
   // Скроллинг экрана
@@ -66,17 +71,50 @@ void SceneBase::keyReleaseEvent(QKeyEvent* event) {
   }
 }
 
+void SceneBase::wheelEvent(QGraphicsSceneWheelEvent* event) { event->accept(); }
+
 void SceneBase::SetupField() {
   // Частота обновления кадров
-  startTimer(10);
+  startTimer(30);
 
   // Создание игрока
-  player_ = new Player;
-  player_->setPos(1500, 1500);
+  player_ = new Player(this);
+  player_->setPos(1400, 1500);
   addItem(player_);
 
   Enemy* enemy_ = new Enemy(this);
-  enemy_->setPos(1800, 1500);
+  enemy_->setPos(1800, 1600);
   enemies_.append(enemy_);
   addItem(enemy_);
+
+  Enemy* enemy = new Enemy(this);
+  enemy->setPos(1800, 1600);
+  enemies_.append(enemy);
+  addItem(enemy);
+
+  Environment* block =
+      new Environment(300, 200, CollisionLayer::PUSHABLE_BODY, this);
+  block->SetPos(1000, 1000);
+  block->CustomizeColComp(QVector2D(100, 100), QSize(33, 100));
+  block->SetColCompVisibility(true);
+  addItem(block);
+
+  Environment* rect =
+      new Environment(100, 100, CollisionLayer::DRAGGABLE_BODY, this);
+  rect->SetPos(1600, 1600);
+  addItem(rect);
+
+  Environment* rect3 =
+      new Environment(100, 100, CollisionLayer::PUSHABLE_BODY, this);
+  rect3->SetPos(1700, 1700);
+  addItem(rect3);
+
+  Environment* rect2 = new Environment(100, 100, CollisionLayer::NONE, this);
+  rect2->SetPos(1800, 1600);
+  addItem(rect2);
+
+  Environment* rect1 =
+      new Environment(100, 100, CollisionLayer::PHYSICS_BODY, this);
+  rect1->SetPos(1700, 1500);
+  addItem(rect1);
 }

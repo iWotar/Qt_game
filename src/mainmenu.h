@@ -22,6 +22,8 @@ class MainMenu : public QGraphicsScene {
 
   void keyPressEvent(QKeyEvent* event) override;
 
+  void wheelEvent(QGraphicsSceneWheelEvent* event) override;
+
  signals:
   void OpenLevel();
   void CloseGame();

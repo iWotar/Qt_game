@@ -1,18 +1,20 @@
 #include "gameview.h"
 
-GameView::GameView() : cur_scene_(Scene::MAIN_MENU),
-                       main_menu_(new MainMenu),
-                       dev_location_(new SceneBase) {
+GameView::GameView()
+    : cur_scene_(Scene::MAIN_MENU),
+      main_menu_(new MainMenu),
+      dev_location_(new SceneBase) {
   dev_location_->SetPaused(true);
 
   setScene(main_menu_);
 
   setMinimumSize(QSize(800, 800));
 
-  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
   show();
+
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  mouse_scrolling_ = false;
 
   connect(main_menu_, &MainMenu::OpenLevel, this, &GameView::OpenLocation);
   connect(main_menu_, &MainMenu::CloseGame, this, &GameView::ExitGame);
@@ -41,12 +43,11 @@ void GameView::OpenMenu() {
   setScene(main_menu_);
   main_menu_->Resize();
 
-  QGraphicsItem* mgi =  main_menu_->mouseGrabberItem();
+  QGraphicsItem* mgi = main_menu_->mouseGrabberItem();
   if (mgi != nullptr) {
     mgi->setEnabled(false);
     mgi->setEnabled(true);
   }
-
   cur_scene_ = Scene::MAIN_MENU;
 }
 

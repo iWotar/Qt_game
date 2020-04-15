@@ -15,7 +15,7 @@ class Widget : public QWidget {
   ~Widget();
 
  private:
-  Ui::Widget *ui;
+  Ui::Widget* ui;
 };
 
 #endif  // WIDGET_H

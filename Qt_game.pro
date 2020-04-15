@@ -28,19 +28,25 @@ INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 
 SOURCES += \
+        src/collisionrect.cpp \
         src/enemy.cpp \
+        src/environment.cpp \
         src/gameview.cpp \
         src/main.cpp \
         src/mainmenu.cpp \
+        src/movableentity.cpp \
         src/pixmapbutton.cpp \
         src/player.cpp \
         src/scene_base.cpp \
         src/widget.cpp
 
 HEADERS += \
+        src/collisionrect.h \
         src/enemy.h \
+        src/environment.h \
         src/gameview.h \
         src/mainmenu.h \
+        src/movableentity.h \
         src/pixmapbutton.h \
         src/player.h \
         src/scene_base.h \

@@ -12,10 +12,10 @@ class PixmapButton : public QObject, public QGraphicsPixmapItem {
  public:
   explicit PixmapButton(QPixmap* img);
 
-  void Resize(int x, int y);
+  void Resize(int32_t x, int32_t y);
 
-  int Width() const;
-  int Height() const;
+  int32_t Width() const;
+  int32_t Height() const;
 
  protected:
   void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
@@ -26,8 +26,8 @@ class PixmapButton : public QObject, public QGraphicsPixmapItem {
  private:
   QPixmap* image_;
 
-  int width_;
-  int height_;
+  int32_t width_;
+  int32_t height_;
 };
 
 #endif  // PIXMAPBUTTON_H

@@ -1,34 +1,32 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include <QGraphicsRectItem>
-
+#include "movableentity.h"
 #include "player.h"
 
 class SceneBase;
+class CollisionRect;
 
-class Enemy : public QObject, public QGraphicsRectItem {
-    Q_OBJECT
+class Enemy : public QObject, public MovableEntity {
+  Q_OBJECT
+
  public:
-    explicit Enemy(SceneBase* parent);
-    void NextFrame();
-    void Attack(Player* target);
-    QVector2D VectorToPlayer(Player* target);
+  explicit Enemy(SceneBase* parent);
+  void NextFrame();
+  void Attack(Player* target);
+  QVector2D VectorToPlayer(Player* target) const;
 
  public slots:
-    void FlushCooldown();
+  void FlushCooldown();
 
  private:
-    SceneBase* parent_scene_;
+  void ProcessMovement(QVector2D way) override;
 
-    int speed_ = 1;
-    int damage_ = 10;
-    int attack_cd_ = 1;
-    double attack_dist_ = 10;
-    bool cooldown_ = false;
+  SceneBase* parent_scene_;
 
-    int width_ = 50;
-    int height_ = 100;
+  int32_t damage_ = 10;
+  int32_t attack_cd_ = 1;
+  bool cooldown_ = false;
 };
 
 #endif  // ENEMY_H

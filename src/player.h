@@ -1,36 +1,35 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <QGraphicsRectItem>
 #include <QGraphicsScene>
 #include <QVector2D>
 
-enum class Directions {UP, DOWN, RIGHT, LEFT, STAY};
+#include "movableentity.h"
 
-class Player : public QGraphicsRectItem {
+class SceneBase;
+class CollisionRect;
+
+enum class Directions { UP, DOWN, RIGHT, LEFT, STAY };
+
+class Player : public MovableEntity {
  public:
-  Player();
+  explicit Player(SceneBase* parent);
 
   void NextFrame();
 
-  int GetSpeed() const;
-  int GetHealth() const;
-  QVector2D GetDirectionVector();
+  int32_t GetHealth() const;
+  QVector2D GetDirectionVector() const;
 
-  int Width() const;
-  int Height() const;
-
-  void SetSize(const QSize& size);
-  void SetHealth(int hp);
+  void SetHealth(int32_t hp);
 
   Directions direction_;
 
  private:
-  int health_ = 100;
-  int speed_ = 5;
+  void ProcessMovement(QVector2D way) override;
 
-  int width_ = 100;
-  int height_ = 200;
+  SceneBase* parent_scene_;
+
+  int32_t health_ = 100;
 };
 
 #endif  // PLAYER_H
