@@ -15,7 +15,7 @@ MainMenu::MainMenu() : QGraphicsScene() {
 }
 
 void MainMenu::Resize() {
-  QGraphicsView* view = views()[0];
+  QGraphicsView *view = views()[0];
 
   setSceneRect(0, 0, view->width(), view->height());
   view->horizontalScrollBar()->setValue(1);
@@ -31,7 +31,7 @@ void MainMenu::Resize() {
   btn_exit_->setPos(w / 4, h / 5 * 3);
 }
 
-void MainMenu::keyPressEvent(QKeyEvent* event) {
+void MainMenu::keyPressEvent(QKeyEvent *event) {
   switch (event->key()) {
     case Qt::Key_G:
       emit OpenLevel();

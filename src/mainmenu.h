@@ -20,7 +20,7 @@ class MainMenu : public QGraphicsScene {
 
   void Resize();
 
-  void keyPressEvent(QKeyEvent* event) override;
+  void keyPressEvent(QKeyEvent *event) override;
 
   void wheelEvent(QGraphicsSceneWheelEvent* event) override;
 
@@ -29,8 +29,8 @@ class MainMenu : public QGraphicsScene {
   void CloseGame();
 
  private:
-  PixmapButton* btn_begin_;
-  PixmapButton* btn_exit_;
+  PixmapButton *btn_begin_;
+  PixmapButton *btn_exit_;
 };
 
 #endif  // MAINMENU_H

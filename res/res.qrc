@@ -2,5 +2,9 @@
     <qresource prefix="/imges">
         <file>Images/Begin.bmp</file>
         <file>Images/Exit.bmp</file>
+	<file>Images/Arrow.png</file>
+    </qresource>
+    <qresource prefix="/sprites">
+        <file>Sprites/player.png</file>
     </qresource>
 </RCC>

@@ -25,8 +25,13 @@ class SceneBase : public QGraphicsScene {
   void timerEvent(QTimerEvent* event) override;
   void keyPressEvent(QKeyEvent* event) override;
   void keyReleaseEvent(QKeyEvent* event) override;
+  void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
   void wheelEvent(QGraphicsSceneWheelEvent* event) override;
+
+  void AddBullet(Bullet* b);
+  void DeleteBullet(Bullet* b);
+  void DeleteEnemy(Enemy* e);
 
  signals:
   void SceneIsPaused();
@@ -36,6 +41,7 @@ class SceneBase : public QGraphicsScene {
 
   Player* player_;
   QVector<Enemy*> enemies_;
+  QVector<Bullet*> bullets_;
 
   QScrollBar* scroll_v_;
   QScrollBar* scroll_h_;

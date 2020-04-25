@@ -35,6 +35,8 @@ int32_t MovableEntity::Height() const { return height_; }
 
 int32_t MovableEntity::GetSpeed() const { return speed_; }
 
+QVector2D MovableEntity::GetSightDir() const { return sight_dir_; }
+
 void MovableEntity::SetSize(int32_t width, int32_t height) {
   qreal w_coef = width / width_;
   qreal h_coef = height / height_;
@@ -64,6 +66,11 @@ void MovableEntity::SetColCompVisibility(bool is_visible) {
   collision_component_->SetVisibility(is_visible);
 }
 
+void MovableEntity::SetSightDir(QVector2D dir) {
+  sight_dir_ = dir;
+  sight_dir_.normalize();
+}
+
 void MovableEntity::CustomizeColComp(QVector2D coord, QSize size) {
   comp_angular_coord_.up_left_ = coord;
   comp_angular_coord_.dw_right_ =
@@ -87,4 +94,8 @@ void MovableEntity::CustomizeColComp(
       comp_angular_coord.second.toPoint() - comp_angular_coord.first.toPoint();
 
   CustomizeColComp(comp_angular_coord.first, QSize(size.x(), size.y()));
+}
+
+CollisionRect *MovableEntity::GetCollisionComponent() const {
+  return collision_component_;
 }

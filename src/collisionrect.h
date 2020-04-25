@@ -9,7 +9,7 @@
 
 class SceneBase;
 
-enum class ObjectType { PLAYER, ENEMY, ENVIRONMENT };
+enum class ObjectType { PLAYER, ENEMY, ENVIRONMENT, WEAPON };
 enum class CollisionLayer { PHYSICS_BODY, PUSHABLE_BODY, DRAGGABLE_BODY, NONE };
 
 class CollisionRect : public QGraphicsRectItem {
@@ -17,15 +17,16 @@ class CollisionRect : public QGraphicsRectItem {
   CollisionRect(ObjectType type, int32_t width, int32_t height,
                 CollisionLayer tangibility, SceneBase* parent_scene,
                 QGraphicsItem* parent);
-
   void CheckCollision();
 
   void SetVisibility(bool visibility);
+
   void SetSize(int32_t width, int32_t height);
 
   bool IsTouching(ObjectType type) const;
   QVector<QGraphicsItem*> GetTouchingObjects(ObjectType type) const;
 
+  ObjectType GetType() const;
   CollisionLayer GetPhysics() const;
   bool IsColliding() const;
   const QVector<QGraphicsItem*> GetCollidingObjects(CollisionLayer type) const;

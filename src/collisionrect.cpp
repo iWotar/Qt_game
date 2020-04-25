@@ -21,6 +21,7 @@ void CollisionRect::CheckCollision() {
   if (parent_scene_->IsPaused()) {
     return;
   }
+
   QList<QGraphicsItem*> collision_items = collidingItems();
   CollisionRect* it;
   obj_in_touch_.clear();
@@ -49,6 +50,8 @@ QVector<QGraphicsItem*> CollisionRect::GetTouchingObjects(
     ObjectType type) const {
   return obj_in_touch_[type];
 }
+
+ObjectType CollisionRect::GetType() const { return type_; }
 
 CollisionLayer CollisionRect::GetPhysics() const { return phis_type_; }
 

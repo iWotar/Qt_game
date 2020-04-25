@@ -28,6 +28,8 @@ INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 
 SOURCES += \
+        src/archer.cpp \
+        src/bullet.cpp \
         src/collisionrect.cpp \
         src/enemy.cpp \
         src/environment.cpp \
@@ -41,6 +43,8 @@ SOURCES += \
         src/widget.cpp
 
 HEADERS += \
+        src/archer.h \
+        src/bullet.h \
         src/collisionrect.h \
         src/enemy.h \
         src/environment.h \

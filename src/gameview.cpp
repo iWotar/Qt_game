@@ -21,7 +21,7 @@ GameView::GameView()
   connect(dev_location_, &SceneBase::SceneIsPaused, this, &GameView::OpenMenu);
 }
 
-void GameView::resizeEvent(QResizeEvent* event) {
+void GameView::resizeEvent(QResizeEvent *event) {
   Q_UNUSED(event);
 
   if (cur_scene_ == Scene::MAIN_MENU) {
@@ -33,7 +33,7 @@ void GameView::OpenLocation() {
   cur_scene_ = Scene::DEV_LOCATION;
   setScene(dev_location_);
   dev_location_->SetPaused(false);
-  Player* player = dev_location_->GetPlayer();
+  Player *player = dev_location_->GetPlayer();
   centerOn(player->pos().toPoint() +
            QPoint(player->Width() / 2, player->Height() / 2));
 }

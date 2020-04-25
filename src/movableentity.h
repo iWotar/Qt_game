@@ -16,10 +16,13 @@ class MovableEntity : public QGraphicsRectItem {
   int32_t Height() const;
 
   int32_t GetSpeed() const;
+  QVector2D GetSightDir() const;
+  CollisionRect* GetCollisionComponent() const;
 
   void SetSize(int32_t width, int32_t height);
   void SetPos(int32_t x, int32_t y);
   void SetColCompVisibility(bool is_visible);
+  void SetSightDir(QVector2D dir);
 
   void CustomizeColComp(QVector2D coord, QSize size);
   void CustomizeColComp(QVector2D up_left_coord, QVector2D dw_right_coord);
@@ -36,6 +39,8 @@ class MovableEntity : public QGraphicsRectItem {
   };
 
   CompAngularCoord comp_angular_coord_ = {QVector2D(), QVector2D()};
+
+  QVector2D sight_dir_;
 
   int32_t width_ = 0;
   int32_t height_ = 0;

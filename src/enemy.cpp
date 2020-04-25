@@ -23,11 +23,21 @@ Enemy::Enemy(SceneBase* parent) : parent_scene_(parent) {
   parent_scene_->addItem(collision_component_);
 }
 
+Enemy::~Enemy() {
+  parent_scene_->DeleteEnemy(this);
+  delete collision_component_;
+}
+
 void Enemy::NextFrame() {
+  if (health_ <= 0) {
+    delete this;
+    return;
+  }
   Player* target = parent_scene_->GetPlayer();
 
   QVector2D p_vect = target->GetDirectionVector();
   QVector2D vec_to_p = VectorToPlayer(target);
+  SetSightDir(vec_to_p);
 
   QVector2D result_dir = p_vect + vec_to_p;
   result_dir.normalize();
@@ -39,9 +49,8 @@ void Enemy::NextFrame() {
 void Enemy::Attack(Player* target) {
   if (!cooldown_) {
     target->SetHealth(target->GetHealth() - damage_);
-    cooldown_ = true;
-    qDebug() << target->GetHealth();
     QTimer::singleShot(attack_cd_ * 1000, this, &Enemy::FlushCooldown);
+    qDebug() << target->GetHealth();
   }
 }
 
@@ -49,6 +58,12 @@ QVector2D Enemy::VectorToPlayer(Player* target) const {
   return QVector2D(target->x() + target->Width() / 2 - (x() + width_ / 2),
                    target->y() + target->Height() / 2 - (y() + height_ / 2));
 }
+
+int32_t Enemy::GetDamage() const { return damage_; }
+
+int32_t Enemy::GetHealth() const { return health_; }
+
+void Enemy::SetHealth(int32_t hp) { health_ = hp; }
 
 void Enemy::FlushCooldown() { cooldown_ = false; }
 
@@ -63,7 +78,8 @@ void Enemy::ProcessMovement(QVector2D way) {
 
   collision_component_->CheckWay(way);
 
-  if (is_touching_player) {
+  if (is_touching_player && !cooldown_) {
+    cooldown_ = true;
     parent_scene_->GetPlayer()->Push(way, 20);
   }
 }
