@@ -5,6 +5,8 @@
 #include "player.h"
 #include "scene_base.h"
 
+#include <QSound>
+
 class Archer : public Enemy {
  public:
   explicit Archer(SceneBase *parent);
@@ -14,6 +16,8 @@ class Archer : public Enemy {
 
  private:
   int64_t attack_dist_ = 300;
+
+  QSound* bow_shot_;
 };
 
 #endif  // ARCHER_H

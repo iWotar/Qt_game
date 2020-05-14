@@ -28,11 +28,19 @@ Player::Player(SceneBase* parent) : parent_scene_(parent) {
 
   direction_ = Directions::STAY;
   SetSightDir(QVector2D(speed_, 0));
+
+  sounds_.insert(SoundType::BOW_SHOT,
+                 new QSound(":/sounds/Sounds/BowShot.wav"));
+  sounds_.insert(SoundType::STEPS, new QSound(":/sounds/Sounds/Steps.wav"));
 }
 
 void Player::NextFrame() {
   QVector2D dir = GetDirectionVector();
   if (direction_ != Directions::STAY) {
+    if (sounds_[SoundType::STEPS]->isFinished()) {
+      StartSound(SoundType::STEPS);
+    }
+
     SetSightDir(dir);
   }
   Move(dir);
@@ -69,6 +77,8 @@ void Player::Attack() {
     parent_scene_->AddBullet(bullet);
     cooldown_ = true;
     QTimer::singleShot(attack_cd_ * 1000, this, &Player::FlushCooldown);
+
+    StartSound(SoundType::BOW_SHOT);
   }
 }
 
@@ -78,9 +88,11 @@ void Player::ProcessMovement(QVector2D way) {
   collision_component_->CheckCollision();
 
   QVector<QGraphicsItem*> pushable_in_touch =
-      collision_component_->GetCollidingObjects(CollisionLayer::PUSHABLE_BODY);
+      collision_component_->
+          GetCollidingObjects(CollisionLayer::PUSHABLE_BODY);
   QVector<QGraphicsItem*> dragble_in_touch =
-      collision_component_->GetCollidingObjects(CollisionLayer::DRAGGABLE_BODY);
+      collision_component_->
+          GetCollidingObjects(CollisionLayer::DRAGGABLE_BODY);
 
   collision_component_->CheckWay(way);
 
@@ -98,4 +110,12 @@ void Player::ProcessMovement(QVector2D way) {
       it->Push(way, 3);
     }
   }
+}
+
+void Player::StartSound(SoundType type) {
+  sounds_[type]->play();
+}
+
+void Player::StopSound(SoundType type) {
+  sounds_[type]->stop();
 }

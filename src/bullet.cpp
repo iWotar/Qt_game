@@ -29,6 +29,8 @@ Bullet::Bullet(SceneBase* parent_scene, MovableEntity* parent_obj)
   parent_scene_->addItem(collision_component_);
 
   sprite_ = new QPixmap(":/imges/Images/Arrow.png");
+
+  sound_ = new QSound(":/sounds/Sounds/Arrow.wav");
 }
 
 Bullet::~Bullet() {
@@ -64,6 +66,8 @@ void Bullet::ProcessMovement(QVector2D way) {
       Player* target = parent_scene_->GetPlayer();
       target->SetHealth(target->GetHealth() - parent->GetDamage() / 2);
       distance_ = 0;
+
+      sound_->play();
     } else if (collision_component_->IsTouching(ObjectType::ENEMY) &&
                parent_type_ == ObjectType::PLAYER) {
       Player* parent = parent_scene_->GetPlayer();
@@ -72,6 +76,8 @@ void Bullet::ProcessMovement(QVector2D way) {
       target->SetHealth(target->GetHealth() - parent->GetDamage() / 2);
       qDebug() << target->GetHealth();
       distance_ = 0;
+
+      sound_->play();
     }
   }
 }

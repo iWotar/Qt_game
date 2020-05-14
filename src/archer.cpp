@@ -3,6 +3,8 @@
 Archer::Archer(SceneBase *parent) : Enemy(parent) {
   speed_ = 6;
   damage_ = 8;
+
+  bow_shot_ = new QSound(":/sounds/Sounds/BowShot.wav");
 }
 
 void Archer::Attack(Player *target) {
@@ -14,6 +16,8 @@ void Archer::Attack(Player *target) {
     parent_scene_->AddBullet(bullet);
     cooldown_ = true;
     QTimer::singleShot(attack_cd_ * 1000, this, &Enemy::FlushCooldown);
+
+    bow_shot_->play();
   }
 }
 

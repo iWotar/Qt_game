@@ -7,9 +7,12 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <QSound>
 
 #include "enemy.h"
 #include "player.h"
+
+enum class MusicType { CALM, FIGHT, NONE };
 
 class SceneBase : public QGraphicsScene {
   Q_OBJECT
@@ -33,6 +36,9 @@ class SceneBase : public QGraphicsScene {
   void DeleteBullet(Bullet* b);
   void DeleteEnemy(Enemy* e);
 
+  void PlayMusic(MusicType type);
+  void StopAnyMusic();
+
  signals:
   void SceneIsPaused();
 
@@ -47,6 +53,9 @@ class SceneBase : public QGraphicsScene {
   QScrollBar* scroll_h_;
 
   bool paused_;
+
+  QMap<MusicType, QSound*> music_;
+  MusicType what_is_playing_;
 };
 
 #endif  // SCENE_BASE_H

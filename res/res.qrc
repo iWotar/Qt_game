@@ -7,4 +7,11 @@
     <qresource prefix="/sprites">
         <file>Sprites/player.png</file>
     </qresource>
+    <qresource prefix="/sounds">
+        <file>Sounds/Arrow.wav</file>
+        <file>Sounds/BowShot.wav</file>
+        <file>Sounds/CalmMusic.wav</file>
+        <file>Sounds/FightMusic.wav</file>
+        <file>Sounds/Steps.wav</file>
+    </qresource>
 </RCC>

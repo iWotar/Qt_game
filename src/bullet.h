@@ -2,6 +2,7 @@
 #define WEAPONS_H
 
 #include <QObject>
+#include <QSound>
 
 #include "collisionrect.h"
 #include "movableentity.h"
@@ -30,6 +31,8 @@ class Bullet : public QObject, public MovableEntity {
   QVector2D direction_;
 
   int distance_;
+
+  QSound* sound_;
 };
 
 #endif  // WEAPONS_H

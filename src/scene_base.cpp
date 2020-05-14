@@ -10,11 +10,23 @@
 SceneBase::SceneBase() : QGraphicsScene(), paused_(false) {
   setSceneRect(0, 0, 3000, 3000);
   SetupField();
+
+  what_is_playing_ = MusicType::NONE;
+  music_.insert(MusicType::CALM, new QSound(":/sounds/Sounds/CalmMusic.wav"));
+  music_.insert(MusicType::FIGHT,
+                new QSound(":/sounds/Sounds/FightMusic.wav"));
+  for (auto& elem : music_) {
+      elem->setLoops(QSound::Infinite);
+  }
 }
 
 void SceneBase::SetPaused(bool state) {
   paused_ = state;
   player_->direction_ = Directions::STAY;
+  if (paused_) {
+    StopAnyMusic();
+    return;
+  }
 }
 
 bool SceneBase::IsPaused() const { return paused_; }
@@ -39,6 +51,12 @@ void SceneBase::timerEvent(QTimerEvent *event) {
   // Скроллинг экрана
   if (!views().empty())
     views()[0]->ensureVisible(player_->sceneBoundingRect(), 200, 200);
+
+  if (enemies_.empty()) {
+    PlayMusic(MusicType::CALM);
+  } else {
+    PlayMusic(MusicType::FIGHT);
+  }
 }
 
 void SceneBase::keyPressEvent(QKeyEvent *event) {
@@ -91,7 +109,30 @@ void SceneBase::DeleteEnemy(Enemy *e) {
   enemies_.remove(enemies_.indexOf(e));
 }
 
-void SceneBase::wheelEvent(QGraphicsSceneWheelEvent *event) { event->accept(); }
+void SceneBase::PlayMusic(MusicType type) {
+  if (type == MusicType::NONE) {
+    StopAnyMusic();
+    return;
+  }
+  if (what_is_playing_ != type) {
+    if (what_is_playing_ != MusicType::NONE) {
+      music_[what_is_playing_]->stop();
+    }
+    music_[type]->play();
+    what_is_playing_ = type;
+  }
+}
+
+void SceneBase::StopAnyMusic() {
+  for (auto& elem : music_) {
+    elem->stop();
+  }
+  what_is_playing_ = MusicType::NONE;
+}
+
+void SceneBase::wheelEvent(QGraphicsSceneWheelEvent *event) {
+  event->accept();
+}
 
 void SceneBase::SetupField() {
   // Частота обновления кадров
