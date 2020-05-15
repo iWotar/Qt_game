@@ -5,22 +5,30 @@
 #include "collisionrect.h"
 #include "scene_base.h"
 
-Enemy::Enemy(SceneBase* parent) : parent_scene_(parent) {
-  width_ = 50;
-  height_ = 100;
+Enemy::Enemy(SceneBase* parent)
+    : parent_scene_(parent) {
+  width_ = 64;
+  height_ = 64;
   setRect(0, 0, width_, height_);
 
   speed_ = 5;
-  comp_angular_coord_ = {QVector2D(0, height_ / 2), QVector2D(width_, height_)};
+  hp_bar_ = new HpBar(this, &cur_health_, &max_health_);
+  attack_sprite_ = QPixmap(":/sprites/Sprites/RogueAttack.png");
+  walking_sprite_ = QPixmap(":/sprites/Sprites/RogueWalking.png");
+  current_sprite_ = walking_sprite_;
+
+  comp_angular_coord_ = {QVector2D(width_ / 3, height_ / 2),
+                         QVector2D(width_ / 3 * 2, height_)};
 
   collision_component_ = new CollisionRect(
       ObjectType::ENEMY,
       comp_angular_coord_.dw_right_.x() - comp_angular_coord_.up_left_.x(),
       comp_angular_coord_.dw_right_.y() - comp_angular_coord_.up_left_.y(),
       CollisionLayer::PHYSICS_BODY, parent_scene_, this);
-  collision_component_->SetVisibility(true);
+  collision_component_->SetVisibility(false);
 
   parent_scene_->addItem(collision_component_);
+  current_sprite_ = walking_sprite_;
 }
 
 Enemy::~Enemy() {
@@ -29,7 +37,7 @@ Enemy::~Enemy() {
 }
 
 void Enemy::NextFrame() {
-  if (health_ <= 0) {
+  if (cur_health_ <= 0) {
     delete this;
     return;
   }
@@ -44,13 +52,16 @@ void Enemy::NextFrame() {
   result_dir *= speed_;
 
   Move(result_dir);
+  ProcessAnimation();
 }
 
 void Enemy::Attack(Player* target) {
   if (!cooldown_) {
+    current_sprite_ = attack_sprite_;
+    current_frame_x_ = 0;
+    sprite_width_ = 384;
     target->SetHealth(target->GetHealth() - damage_);
     QTimer::singleShot(attack_cd_ * 1000, this, &Enemy::FlushCooldown);
-    qDebug() << target->GetHealth();
   }
 }
 
@@ -61,11 +72,16 @@ QVector2D Enemy::VectorToPlayer(Player* target) const {
 
 int32_t Enemy::GetDamage() const { return damage_; }
 
-int32_t Enemy::GetHealth() const { return health_; }
+int32_t Enemy::GetHealth() const { return cur_health_; }
 
-void Enemy::SetHealth(int32_t hp) { health_ = hp; }
+void Enemy::SetHealth(int32_t hp) { cur_health_ = hp; }
 
-void Enemy::FlushCooldown() { cooldown_ = false; }
+void Enemy::FlushCooldown() {
+  cooldown_ = false;
+  attack_played = false;
+  current_sprite_ = walking_sprite_;
+  sprite_width_ = 576;
+}
 
 void Enemy::ProcessMovement(QVector2D way) {
   collision_component_->CheckCollision();
@@ -83,3 +99,34 @@ void Enemy::ProcessMovement(QVector2D way) {
     parent_scene_->GetPlayer()->Push(way, 20);
   }
 }
+
+void Enemy::ProcessAnimation() {
+  if (sight_dir_.x() >= 0.7) {
+    current_frame_y_ = 3 * frame_height_;
+  } else if (sight_dir_.x() <= -0.7) {
+    current_frame_y_ = frame_height_;
+  } else if (sight_dir_.y() >= 0.7) {
+    current_frame_y_ = 2 * frame_height_;
+  } else if (sight_dir_.y() <= -0.7) {
+    current_frame_y_ = 0;
+  }
+
+  if (current_sprite_ == walking_sprite_ || !attack_played) {
+    current_frame_x_ = (current_frame_x_ + frame_width_) % sprite_width_;
+    if (current_frame_x_ == 0 && current_sprite_ == attack_sprite_) {
+      attack_played = true;
+    }
+  }
+
+  this->update(QRectF(0, 0, width_, height_));
+}
+
+void Enemy::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
+                  QWidget* widget) {
+  Q_UNUSED(option);
+  Q_UNUSED(widget);
+  painter->drawPixmap(0, 0, current_sprite_, current_frame_x_, current_frame_y_,
+                      frame_width_, frame_height_);
+}
+
+QRectF Enemy::boundingRect() const { return QRectF(0, 0, width_, height_); }

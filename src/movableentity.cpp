@@ -96,6 +96,8 @@ void MovableEntity::CustomizeColComp(
   CustomizeColComp(comp_angular_coord.first, QSize(size.x(), size.y()));
 }
 
+void MovableEntity::ProcessAnimation() {}
+
 CollisionRect *MovableEntity::GetCollisionComponent() const {
   return collision_component_;
 }

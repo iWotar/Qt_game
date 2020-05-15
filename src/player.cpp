@@ -8,14 +8,14 @@
 #include "scene_base.h"
 
 Player::Player(SceneBase* parent) : parent_scene_(parent) {
-  width_ = 100;
-  height_ = 200;
+  width_ = 64;
+  height_ = 64;
   setRect(0, 0, width_, height_);
 
-  speed_ = 20;
+  speed_ = 7;
 
-  comp_angular_coord_ = {QVector2D(0, height_ / 3 * 2),
-                         QVector2D(width_, height_)};
+  comp_angular_coord_ = {QVector2D(width_ / 3, height_ / 3 * 2),
+                         QVector2D(width_ / 3 * 2, height_)};
 
   collision_component_ = new CollisionRect(
       ObjectType::PLAYER,
@@ -23,11 +23,21 @@ Player::Player(SceneBase* parent) : parent_scene_(parent) {
       comp_angular_coord_.dw_right_.y() - comp_angular_coord_.up_left_.y(),
       CollisionLayer::PHYSICS_BODY, parent_scene_, this);
 
-  collision_component_->SetVisibility(true);
+  collision_component_->SetVisibility(false);
   parent_scene_->addItem(collision_component_);
 
   direction_ = Directions::STAY;
   SetSightDir(QVector2D(speed_, 0));
+
+  hp_bar_ = new HpBar(this, &cur_health_, &max_health_);
+
+  sounds_.insert(SoundType::BOW_SHOT,
+                 new QSound(":/sounds/Sounds/BowShot.wav"));
+  sounds_.insert(SoundType::STEPS, new QSound(":/sounds/Sounds/Steps.wav"));
+
+  attack_sprite_ = QPixmap(":/sprites/Sprites/HeroAttack.png");
+  walking_sprite_ = QPixmap(":/sprites/Sprites/HeroWalking.png");
+  current_sprite_ = walking_sprite_;
 
   sounds_.insert(SoundType::BOW_SHOT,
                  new QSound(":/sounds/Sounds/BowShot.wav"));
@@ -40,13 +50,13 @@ void Player::NextFrame() {
     if (sounds_[SoundType::STEPS]->isFinished()) {
       StartSound(SoundType::STEPS);
     }
-
     SetSightDir(dir);
   }
   Move(dir);
+  ProcessAnimation();
 }
 
-int32_t Player::GetHealth() const { return health_; }
+int32_t Player::GetHealth() const { return cur_health_; }
 
 int32_t Player::GetDamage() const { return damage_; }
 
@@ -65,24 +75,62 @@ QVector2D Player::GetDirectionVector() const {
   }
 }
 
-void Player::SetHealth(int32_t hp) { health_ = hp; }
+void Player::SetHealth(int32_t hp) { cur_health_ = hp; }
 
 void Player::Attack() {
-  // Позднее с появлением предметов вид атаки должен будет зависеть от оружия
-  // (дальняя или ближняя)
-  if (!cooldown_) {
-    Bullet* bullet = new Bullet(parent_scene_, this);
-    bullet->setPos(pos() + QPoint(width_ / 2, height_ / 2));
-    parent_scene_->addItem(bullet);
-    parent_scene_->AddBullet(bullet);
-    cooldown_ = true;
-    QTimer::singleShot(attack_cd_ * 1000, this, &Player::FlushCooldown);
+  Bullet* bullet =
+      new Bullet(parent_scene_, ObjectType::PLAYER, sight_dir_, damage_);
+  bullet->setPos(pos() + QPoint(width_ / 2, height_ / 2));
+  parent_scene_->addItem(bullet);
+  parent_scene_->AddBullet(bullet);
+  cooldown_ = true;
+  QTimer::singleShot(attack_cd_ * 1000, this, &Player::FlushCooldown);
+}
 
-    StartSound(SoundType::BOW_SHOT);
+void Player::ProcessAnimation() {
+  switch (direction_) {
+    case Directions::UP:
+      current_frame_y_ = 0;
+      break;
+    case Directions::DOWN:
+      current_frame_y_ = frame_height_ * 2;
+      break;
+    case Directions::RIGHT:
+      current_frame_y_ = frame_height_ * 3;
+      break;
+    case Directions::LEFT:
+      current_frame_y_ = frame_height_;
+      break;
+    default:
+      break;
   }
+  if (current_sprite_ == walking_sprite_) {
+    if (direction_ != Directions::STAY) {
+      current_frame_x_ = (current_frame_x_ + frame_width_) % sprite_width_;
+    } else {
+      current_frame_x_ = 0;
+    }
+  } else if (current_sprite_ == attack_sprite_) {
+    current_frame_x_ = (current_frame_x_ + frame_width_) % sprite_width_;
+    if (current_frame_x_ == 0) {
+      current_sprite_ = walking_sprite_;
+      sprite_width_ = 576;
+    }
+  }
+
+  this->update(QRectF(0, 0, width_, height_));
 }
 
 void Player::FlushCooldown() { cooldown_ = false; }
+
+void Player::AttackStart() {
+  if (!cooldown_) {
+    current_sprite_ = attack_sprite_;
+    sprite_width_ = 832;
+    current_frame_x_ = 0;
+    QTimer::singleShot(180, this, &Player::Attack);
+  }
+}
 
 void Player::ProcessMovement(QVector2D way) {
   collision_component_->CheckCollision();
@@ -110,7 +158,19 @@ void Player::ProcessMovement(QVector2D way) {
       it->Push(way, 3);
     }
   }
+
+  this->update(QRectF(0, 0, width_, height_));
 }
+
+void Player::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
+                   QWidget* widget) {
+  Q_UNUSED(option);
+  Q_UNUSED(widget);
+  painter->drawPixmap(0, 0, current_sprite_, current_frame_x_, current_frame_y_,
+                      frame_width_, frame_height_);
+}
+
+QRectF Player::boundingRect() const { return QRectF(0, 0, width_, height_); }
 
 void Player::StartSound(SoundType type) {
   sounds_[type]->play();

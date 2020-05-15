@@ -6,14 +6,16 @@
 
 CollisionRect::CollisionRect(ObjectType type, int32_t width, int32_t height,
                              CollisionLayer tangibility,
-                             SceneBase* parent_scene, QGraphicsItem* parent)
+                             SceneBase* parent_scene, QGraphicsItem* parent,
+                             QPixmap* pixmap)
     : QGraphicsRectItem(),
       type_(type),
       phis_type_(tangibility),
       parent_(parent),
       width_(width),
       height_(height),
-      parent_scene_(parent_scene) {
+      parent_scene_(parent_scene),
+      picture_(pixmap) {
   setRect(0, 0, width_, height_);
 }
 
@@ -98,5 +100,8 @@ void CollisionRect::paint(QPainter* painter,
                           QWidget* widget) {
   if (is_visible_) {
     QGraphicsRectItem::paint(painter, option, widget);
+  }
+  if (picture_) {
+    painter->drawPixmap(0, 0, *picture_);
   }
 }

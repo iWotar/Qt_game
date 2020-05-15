@@ -3,9 +3,22 @@
         <file>Images/Begin.bmp</file>
         <file>Images/Exit.bmp</file>
 	<file>Images/Arrow.png</file>
+	<file>Images/Shadow.png</file>
     </qresource>
     <qresource prefix="/sprites">
-        <file>Sprites/player.png</file>
+	<file>Sprites/HeroWalking.png</file>
+        <file>Sprites/HeroAttack.png</file>
+	<file>Sprites/RogueWalking.png</file>
+        <file>Sprites/RogueAttack.png</file>
+	<file>Sprites/SkeletonWalking.png</file>
+        <file>Sprites/SkeletonAttack.png</file>
+    </qresource>
+    <qresource prefix="/sounds">
+        <file>Sounds/Arrow.wav</file>
+        <file>Sounds/BowShot.wav</file>
+        <file>Sounds/CalmMusic.wav</file>
+        <file>Sounds/FightMusic.wav</file>
+        <file>Sounds/Steps.wav</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>Sounds/Arrow.wav</file>

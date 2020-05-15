@@ -9,8 +9,8 @@
 
 class Archer : public Enemy {
  public:
-  explicit Archer(SceneBase *parent);
-  void Attack(Player *target) override;
+  explicit Archer(SceneBase* parent);
+  void Attack(Player* target) override;
   void ProcessMovement(QVector2D way) override;
   void NextFrame() override;
 

@@ -30,6 +30,7 @@ class MovableEntity : public QGraphicsRectItem {
 
  protected:
   virtual void ProcessMovement(QVector2D way) = 0;
+  virtual void ProcessAnimation();
 
   CollisionRect* collision_component_ = nullptr;
 
@@ -46,6 +47,19 @@ class MovableEntity : public QGraphicsRectItem {
   int32_t height_ = 0;
 
   int32_t speed_ = 0;
+
+  // Animation
+  QPixmap current_sprite_;
+  QPixmap attack_sprite_;
+  QPixmap walking_sprite_;
+
+  const int32_t frame_width_ = 64;
+  const int32_t frame_height_ = 64;
+  const int32_t sprite_height_ = 256;
+
+  int32_t current_frame_x_ = 0;
+  int32_t current_frame_y_ = 192;
+  int32_t sprite_width_ = 576;
 };
 
 #endif  // MOVABLEENTITY_H

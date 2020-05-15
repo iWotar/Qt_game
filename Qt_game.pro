@@ -36,6 +36,7 @@ SOURCES += \
         src/enemy.cpp \
         src/environment.cpp \
         src/gameview.cpp \
+        src/hpbar.cpp \
         src/main.cpp \
         src/mainmenu.cpp \
         src/movableentity.cpp \
@@ -51,6 +52,7 @@ HEADERS += \
         src/enemy.h \
         src/environment.h \
         src/gameview.h \
+        src/hpbar.h \
         src/mainmenu.h \
         src/movableentity.h \
         src/pixmapbutton.h \

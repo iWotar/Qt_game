@@ -16,7 +16,7 @@ class CollisionRect : public QGraphicsRectItem {
  public:
   CollisionRect(ObjectType type, int32_t width, int32_t height,
                 CollisionLayer tangibility, SceneBase* parent_scene,
-                QGraphicsItem* parent);
+                QGraphicsItem* parent, QPixmap* pixmap = nullptr);
   void CheckCollision();
 
   void SetVisibility(bool visibility);
@@ -59,6 +59,7 @@ class CollisionRect : public QGraphicsRectItem {
   bool is_visible_ = true;
 
   SceneBase* parent_scene_;
+  QPixmap* picture_;
 };
 
 #endif  // COLLISIONRECT_H

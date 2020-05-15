@@ -13,6 +13,7 @@ SceneBase::SceneBase() : QGraphicsScene(), paused_(false) {
 
   what_is_playing_ = MusicType::NONE;
   music_.insert(MusicType::CALM, new QSound(":/sounds/Sounds/CalmMusic.wav"));
+
   music_.insert(MusicType::FIGHT,
                 new QSound(":/sounds/Sounds/FightMusic.wav"));
   for (auto& elem : music_) {
@@ -37,6 +38,7 @@ void SceneBase::timerEvent(QTimerEvent *event) {
   Q_UNUSED(event);
 
   if (paused_) {
+    StopAnyMusic();
     return;
   }
 
@@ -95,7 +97,7 @@ void SceneBase::keyReleaseEvent(QKeyEvent *event) {
 
 void SceneBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    GetPlayer()->Attack();
+    player_->AttackStart();
   }
 }
 
@@ -105,9 +107,7 @@ void SceneBase::DeleteBullet(Bullet *b) {
   bullets_.remove(bullets_.indexOf(b));
 }
 
-void SceneBase::DeleteEnemy(Enemy *e) {
-  enemies_.remove(enemies_.indexOf(e));
-}
+void SceneBase::DeleteEnemy(Enemy *e) { enemies_.remove(enemies_.indexOf(e)); }
 
 void SceneBase::PlayMusic(MusicType type) {
   if (type == MusicType::NONE) {
@@ -124,7 +124,7 @@ void SceneBase::PlayMusic(MusicType type) {
 }
 
 void SceneBase::StopAnyMusic() {
-  for (auto& elem : music_) {
+  for (auto &elem : music_) {
     elem->stop();
   }
   what_is_playing_ = MusicType::NONE;

@@ -1,6 +1,12 @@
 #include "archer.h"
 
-Archer::Archer(SceneBase *parent) : Enemy(parent) {
+#include "hpbar.h"
+Archer::Archer(SceneBase *parent)
+    : Enemy(parent) {
+  hp_bar_ = new HpBar(this, &cur_health_, &max_health_);
+  attack_sprite_ = QPixmap(":/sprites/Sprites/SkeletonAttack.png");
+  walking_sprite_ = QPixmap(":/sprites/Sprites/SkeletonWalking.png");
+  current_sprite_ = walking_sprite_;
   speed_ = 6;
   damage_ = 8;
 
@@ -10,7 +16,11 @@ Archer::Archer(SceneBase *parent) : Enemy(parent) {
 void Archer::Attack(Player *target) {
   Q_UNUSED(target);
   if (!cooldown_) {
-    Bullet *bullet = new Bullet(parent_scene_, this);
+    current_sprite_ = attack_sprite_;
+    current_frame_x_ = 0;
+    sprite_width_ = 832;
+    Bullet *bullet =
+        new Bullet(parent_scene_, ObjectType::ENEMY, sight_dir_, damage_);
     bullet->setPos(pos());
     parent_scene_->addItem(bullet);
     parent_scene_->AddBullet(bullet);
@@ -27,7 +37,7 @@ void Archer::ProcessMovement(QVector2D way) {
 }
 
 void Archer::NextFrame() {
-  if (health_ <= 0) {
+  if (cur_health_ <= 0) {
     delete this;
     return;
   }
@@ -41,9 +51,13 @@ void Archer::NextFrame() {
   result_dir.normalize();
   result_dir *= speed_;
 
-  if (vec_to_p.length() > attack_dist_) {
+  if (vec_to_p.length() > attack_dist_ && !cooldown_) {
     Move(result_dir);
   } else {
     Attack(target);
   }
+
+  ProcessAnimation();
+
+  this->update(QRectF(0, 0, width_, height_));
 }

@@ -2,34 +2,37 @@
 
 #include "scene_base.h"
 
-Bullet::Bullet(SceneBase* parent_scene, MovableEntity* parent_obj)
-    : parent_scene_(parent_scene), parent_obj_(parent_obj) {
+Bullet::Bullet(SceneBase* parent_scene, ObjectType parent_type,
+               QVector2D sight_dir, int32_t damage)
+    : parent_scene_(parent_scene),
+      damage_(damage),
+      parent_type_(parent_type) {
   speed_ = 40;
   distance_ = 500;
 
-  width_ = 100;
-  height_ = 50;
+  width_ = 45;
+  height_ = 20;
 
-  parent_type_ = parent_obj->GetCollisionComponent()->GetType();
-  direction_ = parent_obj->GetSightDir() * speed_;
+  direction_ = sight_dir * speed_;
+  sprite_ = new QPixmap(":/imges/Images/Arrow.png");
+  QPixmap* shadow = new QPixmap(":/imges/Images/Shadow.png");
 
   setRect(0, 0, width_, height_);
 
-  comp_angular_coord_ = {QVector2D(0, 2*height_), QVector2D(width_, 3*height_)};
+  comp_angular_coord_ = {QVector2D(0, height_), QVector2D(width_, 2 * height_)};
   collision_component_ = new CollisionRect(
       ObjectType::WEAPON,
       comp_angular_coord_.dw_right_.x() - comp_angular_coord_.up_left_.x(),
       comp_angular_coord_.dw_right_.y() - comp_angular_coord_.up_left_.y(),
-      CollisionLayer::NONE, parent_scene, this);
+      CollisionLayer::NONE, parent_scene, this, shadow);
 
   setRotation(GetAngle());
   collision_component_->setRotation(GetAngle());
 
-  collision_component_->SetVisibility(true);
+  collision_component_->SetVisibility(false);
   parent_scene_->addItem(collision_component_);
 
   sprite_ = new QPixmap(":/imges/Images/Arrow.png");
-
   sound_ = new QSound(":/sounds/Sounds/Arrow.wav");
 }
 
@@ -62,21 +65,19 @@ void Bullet::ProcessMovement(QVector2D way) {
   if (collision_component_->IsColliding()) {
     if (collision_component_->IsTouching(ObjectType::PLAYER) &&
         parent_type_ == ObjectType::ENEMY) {
-      Enemy* parent = dynamic_cast<Enemy*>(parent_obj_);
       Player* target = parent_scene_->GetPlayer();
-      target->SetHealth(target->GetHealth() - parent->GetDamage() / 2);
+      target->SetHealth(target->GetHealth() - damage_ / 2);
       distance_ = 0;
-
+      target->Push(way, 5);
       sound_->play();
     } else if (collision_component_->IsTouching(ObjectType::ENEMY) &&
                parent_type_ == ObjectType::PLAYER) {
-      Player* parent = parent_scene_->GetPlayer();
       Enemy* target = dynamic_cast<Enemy*>(
           collision_component_->GetTouchingObjects(ObjectType::ENEMY)[0]);
-      target->SetHealth(target->GetHealth() - parent->GetDamage() / 2);
+      target->SetHealth(target->GetHealth() - damage_ / 2);
       qDebug() << target->GetHealth();
       distance_ = 0;
-
+      target->Push(way, 5);
       sound_->play();
     }
   }

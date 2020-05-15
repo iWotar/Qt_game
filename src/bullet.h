@@ -11,7 +11,8 @@ class SceneBase;
 
 class Bullet : public QObject, public MovableEntity {
  public:
-  Bullet(SceneBase* parent_scene, MovableEntity* parent_obj);
+  Bullet(SceneBase* parent_scene, ObjectType parent_type, QVector2D sight_dir,
+         int32_t damage);
   ~Bullet() override;
 
   void NextFrame();
@@ -24,7 +25,7 @@ class Bullet : public QObject, public MovableEntity {
   QRectF boundingRect() const override;
 
   SceneBase* parent_scene_;
-  MovableEntity* parent_obj_;
+  int32_t damage_;
   ObjectType parent_type_;
   QPixmap* sprite_;
 
