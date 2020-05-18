@@ -3851,6 +3851,7 @@ city_to_poorhs->SetLocation(this);
           player_house_to_city->GetFirstPart()->SetPixmap(
               new QPixmap(":/imges/Images/open_door.png"));
           player_house_to_city->GetFirstPart()->update();
+          view->DisplayText("you took key");
         }
       });
   rooms_["player_house"]->addItem(pickable_object);

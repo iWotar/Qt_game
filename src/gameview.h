@@ -8,6 +8,7 @@
 #include <QResizeEvent>
 #include <QVBoxLayout>
 
+#include "dialoglabel.h"
 #include "interactableobject.h"
 #include "inventorylabel.h"
 #include "player.h"
@@ -37,6 +38,7 @@ class GameView : public QGraphicsView {
   void UpdateInventoryLabels();
   void MoveInventorySelection(int);
   void ActivateAction();
+  void DisplayText(const QString& text);
 
  protected:
   void wheelEvent(QWheelEvent* event) override;
@@ -56,6 +58,8 @@ class GameView : public QGraphicsView {
   QVector<InventoryLabel*> inventory_labels;
   QVBoxLayout* inventory_widget_layout;
   int inventory_selection_index = 0;
+
+  DialogLabel* dialog_label;
 
   qreal view_scale = 1.0;
   const qreal game_scale = 2.5;

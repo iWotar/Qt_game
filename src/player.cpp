@@ -105,13 +105,10 @@ InteractableObject* Player::GetClosestInteractableObject() {
   InteractableObject* result = nullptr;
   for (auto& obj : objects) {
     if (auto interactable_object = dynamic_cast<InteractableObject*>(obj)) {
-      if (result == nullptr) {
+      if (result == nullptr ||
+          SquaredDistanceBetween(player_pos, interactable_object->pos()) <
+              SquaredDistanceBetween(player_pos, result->pos())) {
         result = interactable_object;
-      } else {
-        if (SquaredDistanceBetween(player_pos, interactable_object->pos()) <
-            SquaredDistanceBetween(player_pos, result->pos())) {
-          result = interactable_object;
-        }
       }
     }
   }
@@ -273,6 +270,8 @@ void Player::MoveToScene(SceneBase* scene) {
     parent_scene_->removeItem(this);
     parent_scene_->removeItem(collision_component_);
     parent_scene_->removeItem(interaction_aura_);
+    collision_component_->SetScene(scene);
+    interaction_aura_->SetScene(scene);
   }
 
   parent_scene_ = scene;

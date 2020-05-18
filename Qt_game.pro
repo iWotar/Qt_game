@@ -34,6 +34,7 @@ SOURCES += \
         src/archer.cpp \
         src/bullet.cpp \
         src/collisionrect.cpp \
+        src/dialoglabel.cpp \
         src/dialogs_and_notes.cpp \
         src/door.cpp \
         src/enemy.cpp \
@@ -56,6 +57,7 @@ HEADERS += \
         src/archer.h \
         src/bullet.h \
         src/collisionrect.h \
+        src/dialoglabel.h \
         src/dialogs_and_notes.h \
         src/door.h \
         src/enemy.h \

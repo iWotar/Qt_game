@@ -39,3 +39,7 @@ void Environment::SetVisibility(bool visibility) { is_visible_ = visibility; }
 void Environment::ProcessMovement(QVector2D way) {
   collision_component_->CheckWay(way);
 }
+
+void Environment::SetPixmap(QPixmap* pm) { sprite_ = pm; }
+
+QPixmap* Environment::GetPixmap() { return sprite_; }

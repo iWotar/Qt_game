@@ -40,6 +40,9 @@ GameView::GameView()
   selection_label = new QLabel(inventory_widget);
   selection_label->setPixmap(QPixmap(":/imges/Images/selection.png"));
   selection_label->hide();
+
+  dialog_label = new DialogLabel(this);
+  dialog_label->hide();
 }
 
 void GameView::resizeEvent(QResizeEvent* event) {
@@ -65,6 +68,11 @@ void GameView::OpenLocation() {
              QPoint(player->Width() / 2, player->Height() / 2));
   }
   inventory_widget->show();
+  dialog_label->hide();
+}
+
+void GameView::DisplayText(const QString& str) {
+  dialog_label->DisplayText(str);
 }
 
 void GameView::OpenMenu() {
@@ -84,6 +92,7 @@ void GameView::OpenMenu() {
   }
   cur_scene_type_ = CurrentSceneType::MAIN_MENU;
   inventory_widget->hide();
+  dialog_label->hide();
 }
 
 void GameView::ExitGame() {
@@ -92,6 +101,7 @@ void GameView::ExitGame() {
 }
 
 void GameView::wheelEvent(QWheelEvent* event) {
+  // propagate event to active scene without triggering view scroll
   SceneBase* cur_room = cur_location_->GetCurScene();
   QGraphicsSceneWheelEvent* new_event = new QGraphicsSceneWheelEvent;
   new_event->setPos(event->pos());

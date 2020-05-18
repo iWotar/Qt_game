@@ -20,10 +20,9 @@ class Environment : public MovableEntity {
   void paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
              QWidget* widget) override;
 
+  void SetPixmap(QPixmap* pm);
+  QPixmap* GetPixmap();
   void SetVisibility(bool visibility);
-
-  void SetPixmap(QPixmap* pm) { sprite_ = pm; }
-  QPixmap* GetPixmap() { return sprite_; }
 
  private:
   void ProcessMovement(QVector2D way) override;
