@@ -27,10 +27,16 @@ class MainMenu : public QGraphicsScene {
  signals:
   void OpenLevel();
   void CloseGame();
+  void OpenSettings();
 
  private:
   PixmapButton *btn_begin_;
   PixmapButton *btn_exit_;
+  PixmapButton *btn_settings_;
+  QPixmap background_;
+  QGraphicsPixmapItem* logo_;
+
+  QFont font_ = QFont("Alagard");
 };
 
 #endif  // MAINMENU_H

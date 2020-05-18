@@ -30,6 +30,8 @@ INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 
 SOURCES += \
+        src/gameover.cpp \
+        src/settingsmenu.cpp \
         src/citylocation.cpp \
         src/archer.cpp \
         src/bullet.cpp \
@@ -53,6 +55,8 @@ SOURCES += \
         src/scene_base.cpp
 
 HEADERS += \
+        src/gameover.h \
+        src/settingsmenu.h \
         src/citylocation.h \
         src/archer.h \
         src/bullet.h \

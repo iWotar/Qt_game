@@ -12,13 +12,15 @@
 #include "interactableobject.h"
 #include "inventorylabel.h"
 #include "player.h"
+#include "settingsmenu.h"
+#include "gameover.h"
 
 class SceneBase;
 class MainMenu;
 class DevLocation;
 class LocationBase;
 
-enum class CurrentSceneType { MAIN_MENU, GAME_MENU, GAME };
+enum class CurrentSceneType { MAIN_MENU, GAME_MENU, GAME, SETTINGS };
 
 class GameView : public QGraphicsView {
   Q_OBJECT
@@ -31,7 +33,8 @@ class GameView : public QGraphicsView {
  public slots:
   void OpenLocation();
   void OpenMenu();
-
+  void OpenSettings();
+  void OpenGameOver();
   void ExitGame();
 
   void UpdateInventoryLabels(const QVector<InteractableObject*>& objects);
@@ -48,6 +51,10 @@ class GameView : public QGraphicsView {
   SceneBase* cur_scene_;
 
   MainMenu* main_menu_;
+
+  SceneBase* dev_location_;
+  GameOver* game_over_;
+  SettingsMenu* settings_;
   LocationBase* cur_location_;
   QMap<QString, LocationBase*> all_locations_;
 

@@ -35,7 +35,7 @@ class Enemy : public QObject, public MovableEntity {
 
   SceneBase* parent_scene_;
 
-  int32_t damage_ = 10;
+  int32_t damage_ = 50;
   int32_t attack_cd_ = 1;
   int32_t cur_health_ = 100;
   int32_t max_health_ = 100;

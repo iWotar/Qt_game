@@ -1,20 +1,22 @@
 <RCC>
     <qresource prefix="/imges">
-        <file>Images/Arrow.png</file>
-        <file>Images/Begin.bmp</file>
-        <file>Images/Begin.png</file>
-        <file>Images/City.png</file>
-        <file>Images/Exit.bmp</file>
-        <file>Images/Exit.png</file>
-        <file>Images/house.png</file>
+        <file>Images/Player.png</file>
         <file>Images/key.png</file>
         <file>Images/locked_door.png</file>
         <file>Images/open_door.png</file>
-        <file>Images/Player.png</file>
-        <file>Images/selection.png</file>
-        <file>Images/Shadow.png</file>
-        <file>Images/shotgun.png</file>
+        <file>Images/Arrow.png</file>
+        <file>Images/house.png</file>
+        <file>Images/City.png</file>
+	<file>Images/ChBox.png</file>
+	<file>Images/ActiveChBox.png</file>
+	<file>Images/KeyButton.png</file>
+        <file>Images/Button.png</file>
+	<file>Images/Pressed.png</file>
         <file>Images/skeleton.png</file>
+        <file>Images/shotgun.png</file>
+   	<file>Images/MenuBackground.png</file>
+	<file>Images/Logo.png</file>
+        <file>Images/selection.png</file>
         <file>Images/dialog_background.png</file>
         <file>Images/buildings/church.png</file>
         <file>Images/buildings/empty_house.png</file>

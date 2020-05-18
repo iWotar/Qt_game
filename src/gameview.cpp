@@ -9,13 +9,14 @@
 #include "scene_base.h"
 
 GameView::GameView()
-    : cur_scene_type_(CurrentSceneType::MAIN_MENU), main_menu_(new MainMenu) {
+    : cur_scene_type_(CurrentSceneType::MAIN_MENU),
+      main_menu_(new MainMenu),
+      game_over_(new GameOver),
+      settings_(new SettingsMenu) {
   setScene(main_menu_);
 
   setFixedSize(QSize(1280, 720));
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-  setBackgroundBrush(QBrush(QColor(0, 0, 0)));
 
   show();
 
@@ -25,11 +26,19 @@ GameView::GameView()
 
   all_locations_.insert(QString("dev_lock"), new CityLocation(this));
   cur_location_ = all_locations_["dev_lock"];
-
+  all_locations_["dev_lock"]->GetCurScene()->DefaultControl();
   connect(main_menu_, &MainMenu::OpenLevel, this, &GameView::OpenLocation);
   connect(main_menu_, &MainMenu::CloseGame, this, &GameView::ExitGame);
+  connect(main_menu_, &MainMenu::OpenSettings, this, &GameView::OpenSettings);
+  connect(settings_, &SettingsMenu::BackToMenu, this, &GameView::OpenMenu);
+  connect(cur_location_->GetCurScene()->GetPlayer(), &Player::Dead, this,
+          &GameView::OpenGameOver);
+  connect(game_over_, &GameOver::BackToMenu, this, &GameView::OpenMenu);
+
   for (auto loc : all_locations_) {
     connect(loc, &CityLocation::SceneIsPaused, this, &GameView::OpenMenu);
+    connect(settings_, &SettingsMenu::SwitchMusic, loc->GetCurScene(),
+            &SceneBase::SwitchMusic);
   }
 
   inventory_widget = new QWidget(this);
@@ -50,6 +59,8 @@ void GameView::resizeEvent(QResizeEvent* event) {
 
   if (cur_scene_type_ == CurrentSceneType::MAIN_MENU) {
     main_menu_->Resize();
+  } else if (cur_scene_type_ == CurrentSceneType::SETTINGS) {
+    settings_->Resize();
   }
 }
 
@@ -93,6 +104,32 @@ void GameView::OpenMenu() {
   cur_scene_type_ = CurrentSceneType::MAIN_MENU;
   inventory_widget->hide();
   dialog_label->hide();
+}
+
+void GameView::OpenSettings() {
+  setScene(settings_);
+  settings_->Resize();
+  cur_scene_type_ = CurrentSceneType::SETTINGS;
+}
+
+void GameView::OpenGameOver() {
+  if (view_scale == game_scale) {
+    view_scale = 1.0;
+    scale(1.0 / game_scale, 1.0 / game_scale);
+  }
+  SceneBase* cur_room = cur_location_->GetCurScene();
+  cur_room->SetPaused(true);
+  setScene(game_over_);
+  game_over_->Resize();
+  delete cur_location_;
+  all_locations_["dev_lock"] = new CityLocation(this);
+  cur_location_ = all_locations_["dev_lock"];
+  cur_location_->GetCurScene()->DefaultControl();
+
+  connect(cur_location_->GetCurScene()->GetPlayer(), &Player::Dead, this,
+          &GameView::OpenGameOver);
+  connect(cur_location_, &CityLocation::SceneIsPaused, this,
+          &GameView::OpenMenu);
 }
 
 void GameView::ExitGame() {

@@ -51,6 +51,9 @@ class Player : public QObject, public MovableEntity {
 
   void StopSound(SoundType type);
 
+ signals:
+  void Dead();
+
  public slots:
   void FlushCooldown();
   void Attack();

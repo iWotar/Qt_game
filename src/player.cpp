@@ -62,6 +62,10 @@ Player::Player(SceneBase* parent) : parent_scene_(parent) {
 }
 
 void Player::NextFrame() {
+  if (cur_health_ <= 0) {
+    emit Dead();
+    return;
+  }
   QVector2D dir = GetDirectionVector();
   if (direction_ != Directions::STAY) {
     if (sounds_[SoundType::STEPS]->isFinished()) {
@@ -166,7 +170,6 @@ void Player::Attack() {
   bullet->setPos(pos() + QPoint(width_ / 2, height_ / 2));
   parent_scene_->addItem(bullet);
   parent_scene_->AddBullet(bullet);
-  cooldown_ = true;
   QTimer::singleShot(attack_cd_ * 1000, this, &Player::FlushCooldown);
 }
 
@@ -211,7 +214,8 @@ void Player::AttackStart() {
     current_sprite_ = attack_sprite_;
     sprite_width_ = 832;
     current_frame_x_ = 0;
-    QTimer::singleShot(180, this, &Player::Attack);
+    cooldown_ = true;
+    QTimer::singleShot(210, this, &Player::Attack);
   }
 }
 

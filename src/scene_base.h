@@ -19,6 +19,20 @@ class GameView;
 class CityLocation;
 
 enum class MusicType { CALM, FIGHT, NONE };
+enum class ActionType {
+  MOVE_UP,
+  MOVE_DOWN,
+  MOVE_RIGHT,
+  MOVE_LEFT,
+  ATTACK,
+  PAUSE,
+  SWITCH,
+  SELECT_UP,
+  SELECT_DOWN,
+  INTERACT,
+  ACTIVATE,
+  NONE
+};
 
 class SceneBase : public QGraphicsScene {
   Q_OBJECT
@@ -32,6 +46,7 @@ class SceneBase : public QGraphicsScene {
   bool IsPaused() const;
 
   Player* GetPlayer() const;
+
   void SetPlayer(Player* player);
 
   QString GetName();
@@ -50,6 +65,12 @@ class SceneBase : public QGraphicsScene {
 
   void PlayMusic(MusicType type);
   void StopAnyMusic();
+  void DefaultControl();
+
+  static QHash<int, ActionType> control_keys_;
+
+ public slots:
+  void SwitchMusic();
 
  signals:
   void SceneIsPaused();
@@ -67,6 +88,7 @@ class SceneBase : public QGraphicsScene {
   QScrollBar* scroll_h_;
 
   bool paused_;
+  static bool music_stop_;
 
   friend CityLocation;
   QMap<MusicType, QSound*> music_;

@@ -14,6 +14,7 @@ LocationBase::LocationBase() : view_(nullptr), player_(nullptr) {}
 SceneBase* LocationBase::GetCurScene() { return cur_room_.second; }
 
 void LocationBase::ChangeCurScene(SceneBase* scene) {
+  cur_room_.second->SetPaused(true);
   cur_room_ = {scene->GetName(), scene};
   view_->OpenLocation();
 }
