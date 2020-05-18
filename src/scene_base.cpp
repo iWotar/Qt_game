@@ -6,33 +6,41 @@
 #include "collisionrect.h"
 #include "enemy.h"
 #include "environment.h"
+#include "gameview.h"
+#include "player.h"
 
-SceneBase::SceneBase() : QGraphicsScene(), paused_(false) {
-  setSceneRect(0, 0, 3000, 3000);
-  SetupField();
-
+SceneBase::SceneBase(QString name, GameView *view)
+    : QGraphicsScene(),
+      name_(name),
+      view_(view),
+      player_(nullptr),
+      paused_(false) {
   what_is_playing_ = MusicType::NONE;
   music_.insert(MusicType::CALM, new QSound(":/sounds/Sounds/CalmMusic.wav"));
 
-  music_.insert(MusicType::FIGHT,
-                new QSound(":/sounds/Sounds/FightMusic.wav"));
-  for (auto& elem : music_) {
-      elem->setLoops(QSound::Infinite);
+  music_.insert(MusicType::FIGHT, new QSound(":/sounds/Sounds/FightMusic.wav"));
+  for (auto &elem : music_) {
+    elem->setLoops(QSound::Infinite);
   }
 }
 
 void SceneBase::SetPaused(bool state) {
   paused_ = state;
-  player_->direction_ = Directions::STAY;
+  if (player_ != nullptr) {
+    player_->direction_ = Directions::STAY;
+  }
   if (paused_) {
     StopAnyMusic();
-    return;
   }
 }
 
 bool SceneBase::IsPaused() const { return paused_; }
 
 Player *SceneBase::GetPlayer() const { return player_; }
+
+void SceneBase::SetPlayer(Player *player) { player_ = player; }
+
+QString SceneBase::GetName() { return name_; }
 
 void SceneBase::timerEvent(QTimerEvent *event) {
   Q_UNUSED(event);
@@ -42,7 +50,13 @@ void SceneBase::timerEvent(QTimerEvent *event) {
     return;
   }
 
-  player_->NextFrame();
+  if (player_ != nullptr) {
+    player_->NextFrame();
+    // Скроллинг экрана
+    if (!views().empty())
+      views()[0]->ensureVisible(player_->sceneBoundingRect(), 200, 200);
+  }
+
   for (auto e : enemies_) {
     e->NextFrame();
   }
@@ -62,21 +76,36 @@ void SceneBase::timerEvent(QTimerEvent *event) {
 }
 
 void SceneBase::keyPressEvent(QKeyEvent *event) {
+  if (player_ == nullptr) {
+    return;
+  }
   switch (event->key()) {
-    case Qt::Key_Right:
+    case Qt::Key_D:
       player_->direction_ = Directions::RIGHT;
       break;
 
-    case Qt::Key_Left:
+    case Qt::Key_A:
       player_->direction_ = Directions::LEFT;
       break;
 
-    case Qt::Key_Up:
+    case Qt::Key_W:
       player_->direction_ = Directions::UP;
       break;
 
-    case Qt::Key_Down:
+    case Qt::Key_S:
       player_->direction_ = Directions::DOWN;
+      break;
+
+    case Qt::Key_E:
+      player_->Interact();
+      break;
+
+    case Qt::Key_Up:
+      view_->MoveInventorySelection(-1);
+      break;
+
+    case Qt::Key_Down:
+      view_->MoveInventorySelection(1);
       break;
 
     case Qt::Key_Escape:
@@ -88,17 +117,27 @@ void SceneBase::keyPressEvent(QKeyEvent *event) {
   }
 }
 
+void SceneBase::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
+  if (mouseEvent->button() == Qt::RightButton) {
+    view_->ActivateAction();
+  } else if (mouseEvent->button() == Qt::LeftButton) {
+    player_->AttackStart();
+  }
+}
+
 void SceneBase::keyReleaseEvent(QKeyEvent *event) {
-  if (event->key() == Qt::Key_Right || event->key() == Qt::Key_Left ||
-      event->key() == Qt::Key_Up || event->key() == Qt::Key_Down) {
+  if (player_ == nullptr) {
+    return;
+  }
+  if (event->key() == Qt::Key_D || event->key() == Qt::Key_A ||
+      event->key() == Qt::Key_W || event->key() == Qt::Key_S) {
     player_->direction_ = Directions::STAY;
   }
 }
 
-void SceneBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  if (event->button() == Qt::LeftButton) {
-    player_->AttackStart();
-  }
+void SceneBase::wheelEvent(QGraphicsSceneWheelEvent *event) {
+  if (event->delta() > 0) view_->MoveInventorySelection(-1);
+  if (event->delta() < 0) view_->MoveInventorySelection(1);
 }
 
 void SceneBase::AddBullet(Bullet *b) { bullets_.append(b); }
@@ -128,54 +167,4 @@ void SceneBase::StopAnyMusic() {
     elem->stop();
   }
   what_is_playing_ = MusicType::NONE;
-}
-
-void SceneBase::wheelEvent(QGraphicsSceneWheelEvent *event) {
-  event->accept();
-}
-
-void SceneBase::SetupField() {
-  // Частота обновления кадров
-  startTimer(30);
-
-  // Создание игрока
-  player_ = new Player(this);
-  player_->setPos(1400, 1500);
-  addItem(player_);
-
-  Archer *archer = new Archer(this);
-  archer->setPos(1800, 1600);
-  enemies_.append(archer);
-  addItem(archer);
-
-  Enemy *enemy = new Enemy(this);
-  enemy->setPos(1800, 1600);
-  enemies_.append(enemy);
-  addItem(enemy);
-
-  Environment *block =
-      new Environment(300, 200, CollisionLayer::PUSHABLE_BODY, this);
-  block->SetPos(1000, 1000);
-  block->CustomizeColComp(QVector2D(100, 100), QSize(33, 100));
-  block->SetColCompVisibility(true);
-  addItem(block);
-
-  Environment *rect =
-      new Environment(100, 100, CollisionLayer::DRAGGABLE_BODY, this);
-  rect->SetPos(1600, 1600);
-  addItem(rect);
-
-  Environment *rect3 =
-      new Environment(100, 100, CollisionLayer::PUSHABLE_BODY, this);
-  rect3->SetPos(1700, 1700);
-  addItem(rect3);
-
-  Environment *rect2 = new Environment(100, 100, CollisionLayer::NONE, this);
-  rect2->SetPos(1800, 1600);
-  addItem(rect2);
-
-  Environment *rect1 =
-      new Environment(100, 100, CollisionLayer::PHYSICS_BODY, this);
-  rect1->SetPos(1700, 1500);
-  addItem(rect1);
 }

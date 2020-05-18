@@ -8,10 +8,12 @@
 
 #include "collisionrect.h"
 #include "hpbar.h"
+#include "interactableobject.h"
 #include "movableentity.h"
 
 class SceneBase;
 class CollisionRect;
+class PickableObject;
 
 enum class Directions { UP, DOWN, RIGHT, LEFT, STAY };
 
@@ -25,11 +27,22 @@ class Player : public QObject, public MovableEntity {
 
   void NextFrame();
 
+  SceneBase* GetCurScene();
+
+  void MoveToScene(SceneBase* scene);
+
+  void paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
+             QWidget* widget) override;
+
   int32_t GetHealth() const;
+  QVector2D GetDirectionVector() const;
+  QVector<QGraphicsItem*> GetNearbyObjects();
   int32_t GetDamage() const;
 
-  QVector2D GetDirectionVector() const;
   void SetHealth(int32_t hp);
+
+  void Interact();
+  void Activate(int index);
 
   void AttackStart();
   Directions direction_;
@@ -43,13 +56,22 @@ class Player : public QObject, public MovableEntity {
   void Attack();
 
  private:
+  friend InteractableObject;
+  friend PickableObject;
+
+  QPixmap sprite_ = QPixmap(":/imges/Images/Player.png");
+
   void ProcessAnimation() override;
   void ProcessMovement(QVector2D way) override;
-  void paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
-             QWidget* widget) override;
+
   QRectF boundingRect() const override;
 
-  SceneBase* parent_scene_;
+  SceneBase* parent_scene_ = nullptr;
+
+  CollisionRect* interaction_aura_ = nullptr;
+  InteractableObject* GetClosestInteractableObject();
+  InteractableObject* previous_highlight_ = nullptr;
+  QVector<InteractableObject*> inventory_;
 
   bool is_attacking = false;
   int32_t damage_ = 30;

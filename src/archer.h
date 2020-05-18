@@ -1,11 +1,11 @@
 #ifndef ARCHER_H
 #define ARCHER_H
 
+#include <QSound>
+
 #include "enemy.h"
 #include "player.h"
 #include "scene_base.h"
-
-#include <QSound>
 
 class Archer : public Enemy {
  public:

@@ -1,8 +1,11 @@
+# ignore local build files
 build*/
 *.user
-*.bmp
-*.png
-*.jpg
-*.swp
-*.wav
-todo
+
+# ignore resources, except for .qrc
+/res/
+!/res/res.qrc
+
+#ignore vim's swap file and todo
+/*.swp
+/todo

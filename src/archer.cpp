@@ -1,8 +1,7 @@
 #include "archer.h"
 
 #include "hpbar.h"
-Archer::Archer(SceneBase *parent)
-    : Enemy(parent) {
+Archer::Archer(SceneBase *parent) : Enemy(parent) {
   hp_bar_ = new HpBar(this, &cur_health_, &max_health_);
   attack_sprite_ = QPixmap(":/sprites/Sprites/SkeletonAttack.png");
   walking_sprite_ = QPixmap(":/sprites/Sprites/SkeletonWalking.png");

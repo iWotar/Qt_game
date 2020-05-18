@@ -3,14 +3,21 @@
 
 #include <QApplication>
 #include <QGraphicsView>
+#include <QMap>
 #include <QObject>
 #include <QResizeEvent>
+#include <QVBoxLayout>
 
-#include "mainmenu.h"
+#include "interactableobject.h"
+#include "inventorylabel.h"
 #include "player.h"
-#include "scene_base.h"
 
-enum class Scene { MAIN_MENU, DEV_LOCATION };
+class SceneBase;
+class MainMenu;
+class DevLocation;
+class LocationBase;
+
+enum class CurrentSceneType { MAIN_MENU, GAME_MENU, GAME };
 
 class GameView : public QGraphicsView {
   Q_OBJECT
@@ -26,13 +33,32 @@ class GameView : public QGraphicsView {
 
   void ExitGame();
 
+  void UpdateInventoryLabels(const QVector<InteractableObject*>& objects);
+  void UpdateInventoryLabels();
+  void MoveInventorySelection(int);
+  void ActivateAction();
+
+ protected:
+  void wheelEvent(QWheelEvent* event) override;
+
  private:
-  Scene cur_scene_;
+  CurrentSceneType cur_scene_type_;
+  SceneBase* cur_scene_;
 
   MainMenu* main_menu_;
-  SceneBase* dev_location_;
+  LocationBase* cur_location_;
+  QMap<QString, LocationBase*> all_locations_;
 
   bool mouse_scrolling_;
+
+  QWidget* inventory_widget;
+  QLabel* selection_label;
+  QVector<InventoryLabel*> inventory_labels;
+  QVBoxLayout* inventory_widget_layout;
+  int inventory_selection_index = 0;
+
+  qreal view_scale = 1.0;
+  const qreal game_scale = 2.5;
 };
 
 #endif  // GAMEVIEW_H

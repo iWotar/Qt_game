@@ -1,9 +1,20 @@
 <RCC>
     <qresource prefix="/imges">
+        <file>Images/Arrow.png</file>
         <file>Images/Begin.bmp</file>
+        <file>Images/Begin.png</file>
+        <file>Images/City.png</file>
         <file>Images/Exit.bmp</file>
-	<file>Images/Arrow.png</file>
-	<file>Images/Shadow.png</file>
+        <file>Images/Exit.png</file>
+        <file>Images/house.png</file>
+        <file>Images/key.png</file>
+        <file>Images/locked_door.png</file>
+        <file>Images/open_door.png</file>
+        <file>Images/Player.png</file>
+        <file>Images/selection.png</file>
+        <file>Images/Shadow.png</file>
+        <file>Images/shotgun.png</file>
+        <file>Images/skeleton.png</file>
     </qresource>
     <qresource prefix="/sprites">
 	<file>Sprites/HeroWalking.png</file>
@@ -12,13 +23,6 @@
         <file>Sprites/RogueAttack.png</file>
 	<file>Sprites/SkeletonWalking.png</file>
         <file>Sprites/SkeletonAttack.png</file>
-    </qresource>
-    <qresource prefix="/sounds">
-        <file>Sounds/Arrow.wav</file>
-        <file>Sounds/BowShot.wav</file>
-        <file>Sounds/CalmMusic.wav</file>
-        <file>Sounds/FightMusic.wav</file>
-        <file>Sounds/Steps.wav</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>Sounds/Arrow.wav</file>

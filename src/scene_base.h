@@ -12,18 +12,30 @@
 #include "enemy.h"
 #include "player.h"
 
+class Player;
+class Enemy;
+class GameView;
+
+class CityLocation;
+
 enum class MusicType { CALM, FIGHT, NONE };
 
 class SceneBase : public QGraphicsScene {
   Q_OBJECT
 
  public:
-  SceneBase();
+  SceneBase(QString name, GameView* view);
+
+  virtual void SetupField() {}
 
   void SetPaused(bool state);
   bool IsPaused() const;
 
   Player* GetPlayer() const;
+  void SetPlayer(Player* player);
+
+  QString GetName();
+  GameView* GetView() { return view_; }
 
   void timerEvent(QTimerEvent* event) override;
   void keyPressEvent(QKeyEvent* event) override;
@@ -42,8 +54,10 @@ class SceneBase : public QGraphicsScene {
  signals:
   void SceneIsPaused();
 
- private:
-  void SetupField();
+ protected:
+  QString name_;
+
+  GameView* view_;
 
   Player* player_;
   QVector<Enemy*> enemies_;
@@ -54,6 +68,7 @@ class SceneBase : public QGraphicsScene {
 
   bool paused_;
 
+  friend CityLocation;
   QMap<MusicType, QSound*> music_;
   MusicType what_is_playing_;
 };

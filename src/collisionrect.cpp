@@ -44,6 +44,12 @@ void CollisionRect::SetSize(int32_t width, int32_t height) {
   setRect(0, 0, width_, height_);
 }
 
+void CollisionRect::SetScene(SceneBase* scene) { parent_scene_ = scene; }
+
+void CollisionRect::SetObjectType(ObjectType type) { type_ = type; }
+
+void CollisionRect::SetParent(QGraphicsItem* parent) { parent_ = parent; }
+
 bool CollisionRect::IsTouching(ObjectType type) const {
   return !obj_in_touch_[type].isEmpty();
 }

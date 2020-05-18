@@ -30,38 +30,47 @@ INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
 
 SOURCES += \
+        src/citylocation.cpp \
         src/archer.cpp \
         src/bullet.cpp \
         src/collisionrect.cpp \
+        src/door.cpp \
         src/enemy.cpp \
         src/environment.cpp \
         src/gameview.cpp \
+        src/interactableobject.cpp \
+        src/inventorylabel.cpp \
+        src/locationbase.cpp \
         src/hpbar.cpp \
         src/main.cpp \
         src/mainmenu.cpp \
         src/movableentity.cpp \
+        src/pickableobject.cpp \
         src/pixmapbutton.cpp \
         src/player.cpp \
-        src/scene_base.cpp \
-        src/widget.cpp
+        src/scene_base.cpp
 
 HEADERS += \
+        src/citylocation.h \
         src/archer.h \
         src/bullet.h \
         src/collisionrect.h \
+        src/door.h \
         src/enemy.h \
         src/environment.h \
         src/gameview.h \
+        src/interactableobject.h \
+        src/inventorylabel.h \
+        src/locationbase.h \
         src/hpbar.h \
         src/mainmenu.h \
         src/movableentity.h \
+        src/pickableobject.h \
         src/pixmapbutton.h \
         src/player.h \
-        src/scene_base.h \
-        src/widget.h
+        src/scene_base.h
 
-FORMS += \
-        src/widget.ui
+FORMS +=
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

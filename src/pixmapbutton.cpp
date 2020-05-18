@@ -16,7 +16,7 @@ int32_t PixmapButton::Width() const { return width_; }
 
 int32_t PixmapButton::Height() const { return height_; }
 
-void PixmapButton::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+void PixmapButton::mousePressEvent(QGraphicsSceneMouseEvent* event) {
   Q_UNUSED(event);
 
   emit Clicked();

@@ -4,9 +4,7 @@
 
 Bullet::Bullet(SceneBase* parent_scene, ObjectType parent_type,
                QVector2D sight_dir, int32_t damage)
-    : parent_scene_(parent_scene),
-      damage_(damage),
-      parent_type_(parent_type) {
+    : parent_scene_(parent_scene), damage_(damage), parent_type_(parent_type) {
   speed_ = 40;
   distance_ = 500;
 

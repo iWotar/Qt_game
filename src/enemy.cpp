@@ -5,8 +5,7 @@
 #include "collisionrect.h"
 #include "scene_base.h"
 
-Enemy::Enemy(SceneBase* parent)
-    : parent_scene_(parent) {
+Enemy::Enemy(SceneBase* parent) : parent_scene_(parent) {
   width_ = 64;
   height_ = 64;
   setRect(0, 0, width_, height_);
@@ -42,6 +41,9 @@ void Enemy::NextFrame() {
     return;
   }
   Player* target = parent_scene_->GetPlayer();
+  if (target == nullptr) {
+    return;
+  }
 
   QVector2D p_vect = target->GetDirectionVector();
   QVector2D vec_to_p = VectorToPlayer(target);
