@@ -18,7 +18,7 @@ Player::Player(SceneBase* parent) : parent_scene_(parent) {
   speed_ = 7;
 
   comp_angular_coord_ = {QVector2D(width_ / 3, height_ / 3 * 2),
-                         QVector2D(width_ / 3 * 2, height_)};
+                         QVector2D(width_ / 3 * 2, height_ - 10)};
 
   collision_component_ = new CollisionRect(
       ObjectType::PLAYER,
@@ -35,7 +35,8 @@ Player::Player(SceneBase* parent) : parent_scene_(parent) {
   interaction_aura_ =
       new CollisionRect(ObjectType::ENVIRONMENT, width_ * 4, height_ * 2,
                         CollisionLayer::NONE, parent_scene_, this);
-  interaction_aura_->SetVisibility(true);
+  interaction_aura_->SetVisibility(false);
+
   if (parent_scene_ != nullptr) {
     parent_scene_->addItem(interaction_aura_);
     interaction_aura_->setPos(
@@ -272,8 +273,6 @@ void Player::MoveToScene(SceneBase* scene) {
     parent_scene_->removeItem(this);
     parent_scene_->removeItem(collision_component_);
     parent_scene_->removeItem(interaction_aura_);
-    collision_component_->SetScene(scene);
-    interaction_aura_->SetScene(scene);
   }
 
   parent_scene_ = scene;

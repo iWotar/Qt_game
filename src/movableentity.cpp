@@ -21,6 +21,8 @@ void MovableEntity::Move(QVector2D dir) {
 
   setPos(collision_component_->scenePos() -
          comp_angular_coord_.up_left_.toPoint());
+
+  setZValue(pos().y() + comp_angular_coord_.dw_right_.y());
 }
 
 void MovableEntity::Push(QVector2D dir, int32_t strength) {

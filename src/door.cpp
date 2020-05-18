@@ -4,6 +4,7 @@
 #include "collisionrect.h"
 #include "environment.h"
 #include "player.h"
+#include "scene_base.h"
 
 Door::Door(Environment* first_part, Environment* second_part,
            SceneBase* first_scene, SceneBase* second_scene, QPoint first_coord,
@@ -39,12 +40,16 @@ bool Door::Teleport(Player* player) {
     player->MoveToScene(second_scene_);
     player->SetPos(second_coord_.x(), second_coord_.y());
     location_->ChangeCurScene(second_scene_);
+    first_scene_->SetPaused(true);
+    second_scene_->SetPaused(false);
     return true;
   } else if (player->GetCurScene() == second_scene_ &&
              dir_type_ != DirectionType::FIRST_TO_SECOND) {
     player->MoveToScene(first_scene_);
     player->SetPos(first_coord_.x(), first_coord_.y());
     location_->ChangeCurScene(first_scene_);
+    first_scene_->SetPaused(false);
+    second_scene_->SetPaused(true);
     return true;
   }
   return false;

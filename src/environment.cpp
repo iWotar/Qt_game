@@ -28,10 +28,13 @@ void Environment::paint(QPainter *painter,
   if (is_visible_) {
     if (sprite_ != nullptr) {
       painter->drawPixmap(QPoint(0, 0), *sprite_);
+    } else {
+      QGraphicsRectItem::paint(painter, option, widget);
     }
-    QGraphicsRectItem::paint(painter, option, widget);
   }
 }
+
+void Environment::SetVisibility(bool visibility) { is_visible_ = visibility; }
 
 void Environment::ProcessMovement(QVector2D way) {
   collision_component_->CheckWay(way);

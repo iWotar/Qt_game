@@ -15,13 +15,39 @@
         <file>Images/Shadow.png</file>
         <file>Images/shotgun.png</file>
         <file>Images/skeleton.png</file>
+        <file>Images/buildings/church.png</file>
+        <file>Images/buildings/empty_house.png</file>
+        <file>Images/buildings/fake_house.png</file>
+        <file>Images/buildings/maid_house.png</file>
+        <file>Images/buildings/mercenary_house.png</file>
+        <file>Images/buildings/trader_house.png</file>
+        <file>Images/lamp.png</file>
+        <file>Images/buildings/nun_house.png</file>
+        <file>Images/buildings/hunter_house.png</file>
+        <file>Images/buildings/poor_house.png</file>
+        <file>Images/buildings/player_house.png</file>
+        <file>Images/buildings/main_house.png</file>
+        <file>Images/rooms/church_basement.png</file>
+        <file>Images/rooms/church_cabinet.png</file>
+        <file>Images/rooms/church_inside.png</file>
+        <file>Images/rooms/hunter_house_basement.png</file>
+        <file>Images/rooms/hunter_house_inside.png</file>
+        <file>Images/rooms/maid_house_inside.png</file>
+        <file>Images/rooms/main_house_1f.png</file>
+        <file>Images/rooms/main_house_2f.png</file>
+        <file>Images/rooms/main_house_basemt.png</file>
+        <file>Images/rooms/nun_house_inside.png</file>
+        <file>Images/rooms/player_house_inside.png</file>
+        <file>Images/rooms/poor_house_inside.png</file>
+        <file>Images/rooms/trader_basement.png</file>
+        <file>Images/rooms/trader_house_inside.png</file>
     </qresource>
     <qresource prefix="/sprites">
-	<file>Sprites/HeroWalking.png</file>
+        <file>Sprites/HeroWalking.png</file>
         <file>Sprites/HeroAttack.png</file>
-	<file>Sprites/RogueWalking.png</file>
+        <file>Sprites/RogueWalking.png</file>
         <file>Sprites/RogueAttack.png</file>
-	<file>Sprites/SkeletonWalking.png</file>
+        <file>Sprites/SkeletonWalking.png</file>
         <file>Sprites/SkeletonAttack.png</file>
     </qresource>
     <qresource prefix="/sounds">
