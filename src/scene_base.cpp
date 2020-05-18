@@ -80,7 +80,6 @@ void SceneBase::timerEvent(QTimerEvent *event) {
 }
 
 void SceneBase::keyPressEvent(QKeyEvent *event) {
-  qDebug() << event->nativeVirtualKey();
   if (!SceneBase::control_keys_.contains(event->nativeVirtualKey()) ||
       player_ == nullptr) {
     return;

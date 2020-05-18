@@ -26,7 +26,6 @@ class SettingsMenu : public QGraphicsScene {
 
  private:
   QString KeyToString(QKeyEvent* event) const;
-  QPixmap background_;
 
   PixmapButton* back_to_menu_;
   PixmapButton* music_checkbox_;

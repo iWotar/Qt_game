@@ -30,9 +30,12 @@ MainMenu::MainMenu() : QGraphicsScene() {
 
   logo_ = addPixmap(QPixmap(":/imges/Images/Logo.png"));
 
-  background_ = QPixmap(":/imges/Images/MenuBackground.png");
-  setBackgroundBrush(background_.scaled(1000, 1000, Qt::IgnoreAspectRatio,
-                                        Qt::SmoothTransformation));
+  QGraphicsPixmapItem *background_ = new QGraphicsPixmapItem(
+      QPixmap(":/imges/Images/MenuBackground.png")
+          .scaled(1280, 720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+  addItem(background_);
+  background_->setZValue(-1);
+  background_->show();
 }
 
 void MainMenu::Resize() {

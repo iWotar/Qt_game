@@ -22,7 +22,6 @@ class GameOver : public QGraphicsScene {
 
  private:
   PixmapButton* back_to_menu_;
-  QPixmap background_;
   QGraphicsTextItem* logo_;
 
   QFont font_ = QFont("Alagard");

@@ -17,9 +17,12 @@ GameOver::GameOver() {
   logo_ = addText("Game Over");
   logo_->setFont(font_);
 
-  background_ = QPixmap(":/imges/Images/MenuBackground.png");
-  setBackgroundBrush(background_.scaled(1000, 1000, Qt::IgnoreAspectRatio,
-                                        Qt::SmoothTransformation));
+  QGraphicsPixmapItem *background_ = new QGraphicsPixmapItem(
+      QPixmap(":/imges/Images/MenuBackground.png")
+          .scaled(1280, 720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+  addItem(background_);
+  background_->setZValue(-1);
+  background_->show();
 }
 
 void GameOver::Resize() {

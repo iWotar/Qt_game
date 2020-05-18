@@ -5,15 +5,21 @@
 
 class MovableEntity;
 
-class HpBar : public QGraphicsRectItem {
+class HpBar : public QObject, public QGraphicsRectItem {
  public:
   HpBar(MovableEntity* parent, int32_t* cur_hp, int32_t* max_hp);
+
+ public slots:
+  void SwitchVisibility();
 
  protected:
   void paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
              QWidget* widget = nullptr) override;
 
  private:
+  bool is_visible = false;
+
+  int32_t prev_hp_;
   int32_t* cur_hp_;
   int32_t* max_hp_;
 

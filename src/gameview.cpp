@@ -17,6 +17,7 @@ GameView::GameView()
 
   setFixedSize(QSize(1280, 720));
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  setBackgroundBrush(QBrush(QColor(0, 0, 0)));
 
   show();
 
@@ -117,11 +118,17 @@ void GameView::OpenGameOver() {
     view_scale = 1.0;
     scale(1.0 / game_scale, 1.0 / game_scale);
   }
+
   SceneBase* cur_room = cur_location_->GetCurScene();
   cur_room->SetPaused(true);
   setScene(game_over_);
   game_over_->Resize();
+  inventory_widget->hide();
+  dialog_label->hide();
+
+  delete cur_location_->GetCurScene()->GetPlayer();
   delete cur_location_;
+  UpdateInventoryLabels(QVector<InteractableObject*>());
   all_locations_["dev_lock"] = new CityLocation(this);
   cur_location_ = all_locations_["dev_lock"];
   cur_location_->GetCurScene()->DefaultControl();
