@@ -31,6 +31,7 @@ class CollisionRect : public QGraphicsRectItem {
   void SetSize(int32_t width, int32_t height);
   void SetScene(SceneBase* scene);
   void SetObjectType(ObjectType type);
+  void SetCollisionLayer(CollisionLayer layer);
   void SetParent(QGraphicsItem* parent);
 
   bool IsTouching(ObjectType type) const;

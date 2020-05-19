@@ -53,6 +53,12 @@ GameView::GameView()
 
   dialog_label = new DialogLabel(this);
   dialog_label->hide();
+
+  flags_[ActionFlag::WELL] = false;
+  flags_[ActionFlag::BASEMENT_FOOD] = false;
+  flags_[ActionFlag::ENDING] = false;
+  flags_[ActionFlag::HOLE] = false;
+  flags_[ActionFlag::TABLE] = false;
 }
 
 void GameView::resizeEvent(QResizeEvent* event) {
@@ -69,6 +75,11 @@ void GameView::OpenLocation() {
   if (view_scale == 1.0) {
     view_scale = game_scale;
     scale(game_scale, game_scale);
+    DisplayText(
+        "Черт, голова раскалывается. Неужто Немлар меня чем-то отравил. И "
+        "что это за странное чувство, мне кажется, что в округе бродят враги. "
+        "Что за зверский голод, при том еще слабость. Надо сесть и подумать, "
+        "что делать дальше.");
   }
   cur_scene_type_ = CurrentSceneType::GAME;
   SceneBase* cur_room = cur_location_->GetCurScene();
@@ -126,7 +137,7 @@ void GameView::OpenGameOver() {
   inventory_widget->hide();
   dialog_label->hide();
 
-  delete cur_location_->GetCurScene()->GetPlayer();
+  cur_location_->GetCurScene()->DeletePlayer();
   delete cur_location_;
   UpdateInventoryLabels(QVector<InteractableObject*>());
   all_locations_["dev_lock"] = new CityLocation(this);
@@ -201,4 +212,17 @@ void GameView::MoveInventorySelection(int offset) {
     inventory_selection_index = 0;
   }
   UpdateInventoryLabels();
+}
+
+void GameView::EndDay() {
+  if (flags_[ActionFlag::ENDING]) return;
+  QTimer::singleShot(2500, this, &GameView::EndDayImpl);
+  flags_[ActionFlag::ENDING] = true;
+}
+
+void GameView::EndDayImpl() {
+  dialog_label->DisplayText(
+      "День подходит к концу. Стоит пойти спать, не хочу оставаться тут на "
+      "ночь.",
+      false);
 }

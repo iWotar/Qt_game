@@ -35,7 +35,6 @@ class SettingsMenu : public QGraphicsScene {
 
   ActionType ch_button_type = ActionType::NONE;
   PixmapButton* ch_button;
-  QSet<int> invalid_keys = {1061, 1066, 1046, 1069, 1041, 1070};
 
   QFont font_ = QFont("Alagard");
 };

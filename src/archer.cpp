@@ -2,7 +2,6 @@
 
 #include "hpbar.h"
 Archer::Archer(SceneBase *parent) : Enemy(parent) {
-  hp_bar_ = new HpBar(this, &cur_health_, &max_health_);
   attack_sprite_ = QPixmap(":/sprites/Sprites/SkeletonAttack.png");
   walking_sprite_ = QPixmap(":/sprites/Sprites/SkeletonWalking.png");
   current_sprite_ = walking_sprite_;
@@ -41,6 +40,9 @@ void Archer::NextFrame() {
     return;
   }
   Player *target = parent_scene_->GetPlayer();
+  if (target == nullptr) {
+    return;
+  }
 
   QVector2D p_vect = target->GetDirectionVector();
   QVector2D vec_to_p = VectorToPlayer(target);
@@ -60,3 +62,5 @@ void Archer::NextFrame() {
 
   this->update(QRectF(0, 0, width_, height_));
 }
+
+Archer::~Archer() {}

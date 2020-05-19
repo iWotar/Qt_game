@@ -7,15 +7,15 @@
         <file>Images/Arrow.png</file>
         <file>Images/house.png</file>
         <file>Images/City.png</file>
-	<file>Images/ChBox.png</file>
-	<file>Images/ActiveChBox.png</file>
-	<file>Images/KeyButton.png</file>
+        <file>Images/ChBox.png</file>
+        <file>Images/ActiveChBox.png</file>
+        <file>Images/KeyButton.png</file>
         <file>Images/Button.png</file>
-	<file>Images/Pressed.png</file>
+        <file>Images/Pressed.png</file>
         <file>Images/skeleton.png</file>
         <file>Images/shotgun.png</file>
-   	<file>Images/MenuBackground.png</file>
-	<file>Images/Logo.png</file>
+        <file>Images/MenuBackground.png</file>
+        <file>Images/Logo.png</file>
         <file>Images/selection.png</file>
         <file>Images/dialog_background.png</file>
         <file>Images/buildings/church.png</file>
@@ -44,6 +44,11 @@
         <file>Images/rooms/poor_house_inside.png</file>
         <file>Images/rooms/trader_basement.png</file>
         <file>Images/rooms/trader_house_inside.png</file>
+        <file>Images/shovel.png</file>
+        <file>Images/hole.png</file>
+        <file>Images/old_key.png</file>
+        <file>Images/keys.png</file>
+        <file>Images/stone.png</file>
     </qresource>
     <qresource prefix="/sprites">
         <file>Sprites/HeroWalking.png</file>
@@ -59,5 +64,8 @@
         <file>Sounds/CalmMusic.wav</file>
         <file>Sounds/FightMusic.wav</file>
         <file>Sounds/Steps.wav</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file>Fonts/alagard.ttf</file>
     </qresource>
 </RCC>

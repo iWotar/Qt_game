@@ -10,7 +10,7 @@
 #include "player.h"
 
 bool SceneBase::music_stop_ = false;
-QHash<int, ActionType> SceneBase::control_keys_ = {};
+QHash<Qt::Key, ActionType> SceneBase::control_keys_ = {};
 
 SceneBase::SceneBase(QString name, GameView *view)
     : QGraphicsScene(),
@@ -53,7 +53,6 @@ void SceneBase::timerEvent(QTimerEvent *event) {
     return;
   }
 
-
   if (player_ != nullptr) {
     player_->NextFrame();
     // Скроллинг экрана
@@ -80,11 +79,11 @@ void SceneBase::timerEvent(QTimerEvent *event) {
 }
 
 void SceneBase::keyPressEvent(QKeyEvent *event) {
-  if (!SceneBase::control_keys_.contains(event->nativeVirtualKey()) ||
+  if (!SceneBase::control_keys_.contains(static_cast<Qt::Key>(event->key())) ||
       player_ == nullptr) {
     return;
   }
-  switch (SceneBase::control_keys_[event->nativeVirtualKey()]) {
+  switch (SceneBase::control_keys_[static_cast<Qt::Key>(event->key())]) {
     case ActionType::MOVE_RIGHT:
       player_->direction_ = Directions::RIGHT;
       break;
@@ -137,12 +136,12 @@ void SceneBase::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
 }
 
 void SceneBase::keyReleaseEvent(QKeyEvent *event) {
-  if (!SceneBase::control_keys_.contains(event->nativeVirtualKey()) ||
+  if (!SceneBase::control_keys_.contains(static_cast<Qt::Key>(event->key())) ||
       player_ == nullptr) {
     return;
   }
 
-  ActionType action = control_keys_[event->nativeVirtualKey()];
+  ActionType action = control_keys_[static_cast<Qt::Key>(event->key())];
   if (action == ActionType::MOVE_UP || action == ActionType::MOVE_DOWN ||
       action == ActionType::MOVE_RIGHT || action == ActionType::MOVE_LEFT) {
     player_->direction_ = Directions::STAY;
@@ -161,6 +160,11 @@ void SceneBase::DeleteBullet(Bullet *b) {
 }
 
 void SceneBase::DeleteEnemy(Enemy *e) { enemies_.remove(enemies_.indexOf(e)); }
+
+void SceneBase::DeletePlayer() {
+  delete player_;
+  player_ = nullptr;
+}
 
 void SceneBase::PlayMusic(MusicType type) {
   if (type == MusicType::NONE) {
@@ -188,14 +192,14 @@ void SceneBase::SwitchMusic() {
 }
 
 void SceneBase::DefaultControl() {
-  SceneBase::control_keys_[87] = ActionType::MOVE_UP;
-  SceneBase::control_keys_[65] = ActionType::MOVE_LEFT;
-  SceneBase::control_keys_[83] = ActionType::MOVE_DOWN;
-  SceneBase::control_keys_[68] = ActionType::MOVE_RIGHT;
-  SceneBase::control_keys_[32] = ActionType::ATTACK;
-  SceneBase::control_keys_[27] = ActionType::PAUSE;
-  SceneBase::control_keys_[69] = ActionType::INTERACT;
-  SceneBase::control_keys_[38] = ActionType::SELECT_UP;
-  SceneBase::control_keys_[40] = ActionType::SELECT_DOWN;
-  SceneBase::control_keys_[81] = ActionType::ACTIVATE;
+  SceneBase::control_keys_[Qt::Key_W] = ActionType::MOVE_UP;
+  SceneBase::control_keys_[Qt::Key_A] = ActionType::MOVE_LEFT;
+  SceneBase::control_keys_[Qt::Key_S] = ActionType::MOVE_DOWN;
+  SceneBase::control_keys_[Qt::Key_D] = ActionType::MOVE_RIGHT;
+  SceneBase::control_keys_[Qt::Key_Space] = ActionType::ATTACK;
+  SceneBase::control_keys_[Qt::Key_Escape] = ActionType::PAUSE;
+  SceneBase::control_keys_[Qt::Key_E] = ActionType::INTERACT;
+  SceneBase::control_keys_[Qt::Key_Up] = ActionType::SELECT_UP;
+  SceneBase::control_keys_[Qt::Key_Down] = ActionType::SELECT_DOWN;
+  SceneBase::control_keys_[Qt::Key_Q] = ActionType::ACTIVATE;
 }

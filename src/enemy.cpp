@@ -1,16 +1,17 @@
 #include "enemy.h"
 
+#include <QRandomGenerator>
 #include <QTimer>
 
 #include "collisionrect.h"
 #include "scene_base.h"
 
 Enemy::Enemy(SceneBase* parent) : parent_scene_(parent) {
-  width_ = 64;
-  height_ = 64;
+  width_ = 48;
+  height_ = 48;
   setRect(0, 0, width_, height_);
 
-  speed_ = 5;
+  speed_ = 3;
   hp_bar_ = new HpBar(this, &cur_health_, &max_health_);
   attack_sprite_ = QPixmap(":/sprites/Sprites/RogueAttack.png");
   walking_sprite_ = QPixmap(":/sprites/Sprites/RogueWalking.png");
@@ -51,8 +52,13 @@ void Enemy::NextFrame() {
 
   QVector2D result_dir = p_vect + vec_to_p;
   result_dir.normalize();
-  result_dir *= speed_;
 
+  double rand_x = QRandomGenerator::global()->generateDouble();
+  double rand_y = QRandomGenerator::global()->generateDouble();
+
+  result_dir += QVector2D(rand_x - 0.5, rand_y - 0.5);
+  result_dir.normalize();
+  result_dir *= speed_;
   Move(result_dir);
   ProcessAnimation();
 }
@@ -127,8 +133,8 @@ void Enemy::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                   QWidget* widget) {
   Q_UNUSED(option);
   Q_UNUSED(widget);
-  painter->drawPixmap(0, 0, current_sprite_, current_frame_x_, current_frame_y_,
-                      frame_width_, frame_height_);
+  painter->drawPixmap(0, 0, width_, height_, current_sprite_, current_frame_x_,
+                      current_frame_y_, frame_width_, frame_height_);
 }
 
 QRectF Enemy::boundingRect() const { return QRectF(0, 0, width_, height_); }

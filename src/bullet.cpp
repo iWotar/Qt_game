@@ -73,7 +73,6 @@ void Bullet::ProcessMovement(QVector2D way) {
       Enemy* target = dynamic_cast<Enemy*>(
           collision_component_->GetTouchingObjects(ObjectType::ENEMY)[0]);
       target->SetHealth(target->GetHealth() - damage_ / 2);
-      qDebug() << target->GetHealth();
       distance_ = 0;
       target->Push(way, 5);
       sound_->play();

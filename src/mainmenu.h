@@ -35,7 +35,7 @@ class MainMenu : public QGraphicsScene {
   PixmapButton *btn_settings_;
   QGraphicsPixmapItem* logo_;
 
-  QFont font_ = QFont("Alagard");
+  QFont font_;
 };
 
 #endif  // MAINMENU_H

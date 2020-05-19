@@ -8,6 +8,7 @@ class CollisionRect;
 class MovableEntity : public QGraphicsRectItem {
  public:
   MovableEntity();
+  virtual ~MovableEntity();
 
   void Push(QVector2D dir, int32_t strength);
   void Move(QVector2D dir);

@@ -6,6 +6,9 @@
 MainMenu::MainMenu() : QGraphicsScene() {
   setSceneRect(0, 0, 1000, 1000);
   font_.setPointSize(24);
+  int id = QFontDatabase::addApplicationFont(":/fonts/Fonts/alagard.ttf");
+  QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+  font_.setFamily(family);
 
   btn_begin_ = new PixmapButton(QPixmap(":/imges/Images/Button.png"),
                                 QPixmap(":/imges/Images/Pressed.png"));

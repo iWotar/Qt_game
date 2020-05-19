@@ -11,11 +11,11 @@
 #include "scene_base.h"
 
 Player::Player(SceneBase* parent) : parent_scene_(parent) {
-  width_ = 64;
-  height_ = 64;
+  width_ = 48;
+  height_ = 48;
   setRect(0, 0, width_, height_);
 
-  speed_ = 7;
+  speed_ = 5;
 
   comp_angular_coord_ = {QVector2D(width_ / 3, height_ / 3 * 2),
                          QVector2D(width_ / 3 * 2, height_ - 10)};
@@ -140,6 +140,8 @@ QVector<QGraphicsItem*> Player::GetNearbyObjects() {
   result.append(objects);
   objects = interaction_aura_->GetTouchingObjects(ObjectType::ENVIRONMENT);
   result.append(objects);
+  objects = interaction_aura_->GetTouchingObjects(ObjectType::INTERACTABLE);
+  result.append(objects);
   return result;
 }
 
@@ -157,7 +159,7 @@ QVector2D Player::GetDirectionVector() const {
       return QVector2D(-speed_, 0);
     case Directions::RIGHT:
       return QVector2D(speed_, 0);
-    case Directions::STAY:
+    default:
       return QVector2D();
   }
 }
@@ -258,8 +260,8 @@ void Player::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                    QWidget* widget) {
   Q_UNUSED(option);
   Q_UNUSED(widget);
-  painter->drawPixmap(0, 0, current_sprite_, current_frame_x_, current_frame_y_,
-                      frame_width_, frame_height_);
+  painter->drawPixmap(0, 0, width_, height_, current_sprite_, current_frame_x_,
+                      current_frame_y_, frame_width_, frame_height_);
 }
 
 QRectF Player::boundingRect() const { return QRectF(0, 0, width_, height_); }

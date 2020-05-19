@@ -62,12 +62,13 @@ class SceneBase : public QGraphicsScene {
   void AddBullet(Bullet* b);
   void DeleteBullet(Bullet* b);
   void DeleteEnemy(Enemy* e);
+  void DeletePlayer();
 
   void PlayMusic(MusicType type);
   void StopAnyMusic();
   void DefaultControl();
 
-  static QHash<int, ActionType> control_keys_;
+  static QHash<Qt::Key, ActionType> control_keys_;
 
  public slots:
   void SwitchMusic();

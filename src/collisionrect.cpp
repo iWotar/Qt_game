@@ -48,6 +48,10 @@ void CollisionRect::SetScene(SceneBase* scene) { parent_scene_ = scene; }
 
 void CollisionRect::SetObjectType(ObjectType type) { type_ = type; }
 
+void CollisionRect::SetCollisionLayer(CollisionLayer layer) {
+  phis_type_ = layer;
+}
+
 void CollisionRect::SetParent(QGraphicsItem* parent) { parent_ = parent; }
 
 bool CollisionRect::IsTouching(ObjectType type) const {

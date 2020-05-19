@@ -148,9 +148,10 @@ QString SettingsMenu::KeyToString(QKeyEvent *event) const {
 
 void SettingsMenu::keyPressEvent(QKeyEvent *event) {
   if (ch_button_type != ActionType::NONE) {
-    int key = SceneBase::control_keys_.key(ch_button_type);
+    Qt::Key key = SceneBase::control_keys_.key(ch_button_type);
     SceneBase::control_keys_[key] = ActionType::NONE;
-    SceneBase::control_keys_[event->nativeVirtualKey()] = ch_button_type;
+    SceneBase::control_keys_[static_cast<Qt::Key>(event->key())] =
+        ch_button_type;
     QString key_name = KeyToString(event).toUpper();
     for (auto btn : buttons_) {
       if (btn->Text()->toPlainText().toUpper() == key_name) {

@@ -26,6 +26,7 @@ class InteractableObject : public MovableEntity {
   const QPixmap& GetPixmap() const { return *sprite_; }
   void SetPixmap(const QPixmap& pixmap) { sprite_ = new QPixmap(pixmap); }
   void EnableHighlight(bool);
+  void SetPixmapVisible(bool);
 
   void SetInteractAction(const Action& action) { interact_action_ = action; }
   void SetActivateAction(const Action& action) { activate_action_ = action; }
@@ -45,8 +46,8 @@ class InteractableObject : public MovableEntity {
   SceneBase* parent_scene_;
   QPixmap* sprite_ = nullptr;
 
-  bool is_visible_ = true;
   bool highlight_enabled_ = false;
+  bool pixmap_visible_ = true;
   QString name_;
   Action interact_action_;
   Action activate_action_;

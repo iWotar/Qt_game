@@ -103,3 +103,5 @@ void MovableEntity::ProcessAnimation() {}
 CollisionRect *MovableEntity::GetCollisionComponent() const {
   return collision_component_;
 }
+
+MovableEntity::~MovableEntity() {}

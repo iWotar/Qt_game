@@ -2,6 +2,7 @@
 
 #include <QGraphicsPixmapItem>
 
+#include "archer.h"
 #include "collisionrect.h"
 #include "door.h"
 #include "enemy.h"
@@ -219,10 +220,26 @@ connect(room, &SceneBase::SceneIsPaused, this, &CityLocation::SceneIsPaused);
   // Частота обновления кадров
   room->startTimer(30);
 
-  Enemy* enemy_ = new Enemy(room);
-  enemy_->setPos(800, 800);
-  room->enemies_.append(enemy_);
-  room->addItem(enemy_);
+  {
+    Enemy* enemy_ = new Enemy(room);
+    enemy_->setPos(280, 360);
+    room->enemies_.append(enemy_);
+    room->addItem(enemy_);
+  }
+
+  {
+    Enemy* enemy_ = new Enemy(room);
+    enemy_->setPos(90, 1090);
+    room->enemies_.append(enemy_);
+    room->addItem(enemy_);
+  }
+
+  {
+    Enemy* enemy_ = new Enemy(room);
+    enemy_->setPos(1327, 336);
+    room->enemies_.append(enemy_);
+    room->addItem(enemy_);
+  }
 
   {{Environment* inv_walls =
         new Environment(1596, 118, CollisionLayer::PHYSICS_BODY, room);
@@ -1928,7 +1945,7 @@ connect(room, &SceneBase::SceneIsPaused, this, &CityLocation::SceneIsPaused);
   room->addItem(door);
   door->SetColCompVisibility(false);
   door->SetVisibility(false);
-  doors_["hunterhs_to_hunterbase"].append({door, QPoint{85, 38}});
+  doors_["hunterhs_to_hunterbase"].append({door, QPoint{85, 49}});
 }
 
 rooms_[room->GetName()] = room;
@@ -3828,22 +3845,89 @@ Door* city_to_poorhs = new Door(
 player_house_to_city->SetLocation(this);
 church_to_city->SetLocation(this);
 churchin_to_churchcab->SetLocation(this);
+churchin_to_churchcab->SetLock(true);
 churchin_to_churchbase->SetLocation(this);
+churchin_to_churchbase->SetLock(true);
 city_to_hunterhs->SetLocation(this);
 hunterhs_to_hunterbase->SetLocation(this);
 city_to_traderhs->SetLocation(this);
 traderhs_to_traderbase->SetLocation(this);
 city_to_mainhs->SetLocation(this);
+city_to_mainhs->SetLock(true);
 mainhs_to_mainhs2f->SetLocation(this);
 mainhs_to_mainbase->SetLocation(this);
 city_to_maidhs->SetLocation(this);
 city_to_nunhs->SetLocation(this);
 city_to_poorhs->SetLocation(this);
 
+auto* place =
+    new InteractableObject(40, 31, CollisionLayer::NONE, rooms_["city"], "key");
+place->SetPos(1505, 365);
+place->SetPixmap(QPixmap(":/imges/Images/hole.png"));
+place->setVisible(false);
+place->SetInteractAction([](GameView* view, Player* player) {
+  if (view->flags_[ActionFlag::HOLE])
+    view->DisplayText(view->dialog_notes.ShowText(NoteType::HUNTER));
+});
+rooms_["city"]->addItem(place);
+
+{
+  PickableObject* pickable_object =
+      new PickableObject(34, 27, CollisionLayer::NONE, rooms_["city"], "key");
+  pickable_object->SetPos(53, 870);
+  pickable_object->SetActivateAction([place](GameView* view, Player* player) {
+    auto objects = player->GetNearbyObjects();
+    if (objects.contains(place)) {
+      place->setVisible(true);
+      view->flags_[ActionFlag::HOLE] = true;
+      view->DisplayText("Из-под земли выглядывают листы бумаги.");
+    }
+  });
+  pickable_object->SetPickText("Лопата.");
+  rooms_["city"]->addItem(pickable_object);
+  pickable_object->SetPixmap(QPixmap(":/imges/Images/shovel.png"));
+}
+
+{
+  PickableObject* pickable_object = new PickableObject(
+      20, 20, CollisionLayer::NONE, rooms_["traderbase"], "key");
+  pickable_object->SetPos(50, 170);
+  pickable_object->SetActivateAction(
+      [churchin_to_churchbase](GameView* view, Player* player) {
+        auto objects = player->GetNearbyObjects();
+        if (objects.contains(churchin_to_churchbase)) {
+          churchin_to_churchbase->SetLock(false);
+          view->DisplayText("Проход открыт.");
+        }
+      });
+  pickable_object->SetPickText("Неприметный медный ключ.");
+  pickable_object->SetPixmap(QPixmap(":/imges/Images/key.png"));
+  rooms_["traderbase"]->addItem(pickable_object);
+}
+
+{
+  PickableObject* pickable_object = new PickableObject(
+      35, 35, CollisionLayer::NONE, rooms_["mainhs2f"], "key");
+  pickable_object->SetPos(290, 98);
+  pickable_object->SetActivateAction(
+      [churchin_to_churchcab](GameView* view, Player* player) {
+        auto objects = player->GetNearbyObjects();
+        if (objects.contains(churchin_to_churchcab)) {
+          churchin_to_churchcab->SetLock(false);
+          view->DisplayText("Дверь открыта.");
+        }
+      });
+  pickable_object->SetPickText(
+      "Связка ключей. Похоже тут есть ключ от каждого замка.");
+  pickable_object->SetPixmap(QPixmap(":/imges/Images/keys.png"));
+  rooms_["mainhs2f"]->addItem(pickable_object);
+}
+
 {
   PickableObject* pickable_object = new PickableObject(
       20, 20, CollisionLayer::NONE, rooms_["player_house"], "key");
   pickable_object->SetPos(200, 100);
+  player_house_to_city->SetLock(true);
   pickable_object->SetActivateAction(
       [player_house_to_city](GameView* view, Player* player) {
         auto objects = player->GetNearbyObjects();
@@ -3851,25 +3935,222 @@ city_to_poorhs->SetLocation(this);
           player_house_to_city->GetFirstPart()->SetPixmap(
               new QPixmap(":/imges/Images/open_door.png"));
           player_house_to_city->GetFirstPart()->update();
-          view->DisplayText("you took key");
+          player_house_to_city->SetLock(false);
+          view->DisplayText(
+              "Еда может быть у старосты в подвале, раньше он распределял её "
+              "по семьям, а остатки хранил у себя, на черный день. Может это и "
+              "сейчас практикуется.");
         }
       });
+  pickable_object->SetPickText("Старый медный ключ.");
   rooms_["player_house"]->addItem(pickable_object);
   pickable_object->SetPixmap(QPixmap(":/imges/Images/key.png"));
 }
 
-PickableObject* pickable_object = new PickableObject(
-    40, 20, CollisionLayer::NONE, rooms_["player_house"], "shotgun");
-pickable_object->SetPos(200, 200);
-pickable_object->SetActivateAction([player_house_to_city](GameView* view,
-                                                          Player* player) {
-  auto objects = player->GetNearbyObjects();
-  if (objects.contains(player_house_to_city)) {
-    player_house_to_city->GetFirstPart()->SetPixmap(
-        new QPixmap(":/imges/Images/open_door.png"));
-    player_house_to_city->GetFirstPart()->update();
-  }
+auto* church_table = new InteractableObject(23, 14, CollisionLayer::NONE,
+                                            rooms_["churchcab"], "key");
+church_table->SetPos(146, 73);
+church_table->SetInteractAction([](GameView* view, Player* player) {
+  if (view->flags_[ActionFlag::TABLE])
+    view->DisplayText(view->dialog_notes.ShowText(NoteType::TABLE));
+  else
+    view->DisplayText(
+        "В этой тумбочке есть странное отверстие. Наверняка магия...");
 });
-rooms_["player_house"]->addItem(pickable_object);
-pickable_object->SetPixmap(QPixmap(":/imges/Images/shotgun.png"));
+rooms_["churchcab"]->addItem(church_table);
+
+{
+  PickableObject* pickable_object =
+      new PickableObject(35, 35, CollisionLayer::NONE, rooms_["church"], "key");
+  pickable_object->SetPos(82, 313);
+  pickable_object->SetActivateAction(
+      [church_table](GameView* view, Player* player) {
+        auto objects = player->GetNearbyObjects();
+        if (objects.contains(church_table)) {
+          view->flags_[ActionFlag::TABLE] = true;
+          view->DisplayText("Ключ подошёл.");
+        }
+      });
+  pickable_object->SetPixmap(QPixmap(":/imges/Images/stone.png"));
+  pickable_object->SetPixmapVisible(false);
+  pickable_object->SetPickText(
+      "Магический камень. Интересно, какое у него предназначение?");
+  rooms_["church"]->addItem(pickable_object);
+}
+
+{
+  PickableObject* pickable_object =
+      new PickableObject(20, 20, CollisionLayer::NONE, rooms_["maidhs"], "key");
+  pickable_object->SetPos(146, 108);
+  pickable_object->SetActivateAction(
+      [city_to_mainhs](GameView* view, Player* player) {
+        auto objects = player->GetNearbyObjects();
+        if (objects.contains(city_to_mainhs)) {
+          city_to_mainhs->GetFirstPart()->SetPixmap(
+              new QPixmap(":/imges/Images/open_door.png"));
+          city_to_mainhs->GetFirstPart()->update();
+          city_to_mainhs->SetLock(false);
+          view->DisplayText("Ключ подошёл.");
+        }
+      });
+  pickable_object->SetPickText(
+      "Металлический ключ. На вид использовался часто.");
+  rooms_["maidhs"]->addItem(pickable_object);
+  pickable_object->SetPixmap(QPixmap(":/imges/Images/old_key.png"));
+}
+
+{
+  auto* object = new InteractableObject(20, 20, CollisionLayer::NONE,
+                                        rooms_["player_house"], "key");
+  object->SetPos(220, 175);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(view->dialog_notes.ShowText(NoteType::BEGINNING));
+  });
+  rooms_["player_house"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(10, 20, CollisionLayer::NONE,
+                                        rooms_["player_house"], "key");
+  object->SetPos(220, 195);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(view->dialog_notes.ShowText(NoteType::PLAN));
+  });
+  rooms_["player_house"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(16, 16, CollisionLayer::NONE,
+                                        rooms_["poorhs"], "key");
+  object->SetPos(123, 102);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(view->dialog_notes.ShowText(NoteType::GIRL));
+  });
+  rooms_["poorhs"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(16, 16, CollisionLayer::NONE,
+                                        rooms_["nunhs"], "key");
+  object->SetPos(27, 102);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(view->dialog_notes.ShowText(NoteType::CLOISTRESS));
+  });
+  rooms_["nunhs"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(15, 20, CollisionLayer::NONE,
+                                        rooms_["mainhs"], "key");
+  object->SetPos(55, 194);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(view->dialog_notes.ShowText(NoteType::HEAD_DAUGHTER));
+  });
+  rooms_["mainhs"]->addItem(object);
+}
+
+{
+  SceneBase* room = rooms_["mainhs"];
+  Enemy* enemy_ = new Enemy(room);
+  enemy_->setPos(344, 278);
+  room->enemies_.append(enemy_);
+  room->addItem(enemy_);
+}
+
+{
+  SceneBase* room = rooms_["church"];
+  Archer* enemy_ = new Archer(room);
+  enemy_->setPos(240, 306);
+  room->enemies_.append(enemy_);
+  room->addItem(enemy_);
+  enemy_->Push(QVector2D(1, 1), 1);
+}
+
+{
+  auto* object = new InteractableObject(15, 20, CollisionLayer::NONE,
+                                        rooms_["mainhs2f"], "key");
+  object->SetPos(291, 122);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(view->dialog_notes.ShowText(NoteType::STRONGBOX));
+  });
+  rooms_["mainhs2f"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(14, 14, CollisionLayer::NONE,
+                                        rooms_["traderhs"], "key");
+  object->SetPos(150, 200);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(view->dialog_notes.ShowText(NoteType::HEAD));
+  });
+  rooms_["traderhs"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(23, 14, CollisionLayer::NONE,
+                                        rooms_["churchcab"], "key");
+  object->SetPos(97, 122);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(view->dialog_notes.ShowText(NoteType::PRIEST));
+  });
+  rooms_["churchcab"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(24, 24, CollisionLayer::NONE,
+                                        rooms_["church"], "key");
+  object->SetPos(242, 218);
+  object->SetInteractAction(
+      [](GameView* view, Player* player) { view->DisplayText("Библия."); });
+  rooms_["church"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(240, 240, CollisionLayer::NONE,
+                                        rooms_["mainbase"], "key");
+  object->SetPos(0, 0);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(
+        "Тут еды хватит мне на месяц, не так уж много, как я думал, но же "
+        "неплохо. Переносить ее домой смысла мало, я могу тут ее брать.");
+    view->flags_[ActionFlag::BASEMENT_FOOD] = true;
+    if (view->flags_[ActionFlag::WELL]) view->EndDay();
+  });
+  rooms_["mainbase"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(460, 240, CollisionLayer::NONE,
+                                        rooms_["churchbase"], "key");
+  object->SetPos(240, 70);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(
+        "Чтобы такое откопать мне понадобиться время, но я так все не оставлю");
+  });
+  rooms_["churchbase"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(40, 40, CollisionLayer::NONE,
+                                        rooms_["city"], "key");
+  object->SetPos(1040, 523);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    view->DisplayText(
+        "Колодец не пересох, да и вода вроде чистая, должна сгодится для "
+        "питья.");
+    view->flags_[ActionFlag::WELL] = true;
+    if (view->flags_[ActionFlag::BASEMENT_FOOD]) view->EndDay();
+  });
+  rooms_["city"]->addItem(object);
+}
+
+{
+  auto* object = new InteractableObject(24, 48, CollisionLayer::NONE,
+                                        rooms_["player_house"], "key");
+  object->SetPos(24, 73);
+  object->SetInteractAction([](GameView* view, Player* player) {
+    if (view->flags_[ActionFlag::ENDING]) view->OpenMenu();
+  });
+  rooms_["player_house"]->addItem(object);
+}
 }

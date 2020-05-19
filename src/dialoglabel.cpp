@@ -1,7 +1,5 @@
 #include "dialoglabel.h"
 
-#include <QTimer>
-
 DialogLabel::DialogLabel(QWidget* parent)
     : QObject(), background_(new QLabel(parent)), text_(new QLabel(parent)) {
   background_->setPixmap(QPixmap(":/imges/Images/dialog_background.png"));
@@ -20,14 +18,21 @@ DialogLabel::DialogLabel(QWidget* parent)
 
   font_ = new QFont;
   font_->setWeight(QFont::Bold);
-  font_->setPixelSize(25);
+  font_->setPixelSize(16);
   text_->setFont(*font_);
+  text_->setWordWrap(true);
+
+  timer_ = new QTimer;
+  timer_->setSingleShot(true);
+  connect(timer_, &QTimer::timeout, this, &DialogLabel::hide);
 }
 
-void DialogLabel::DisplayText(const QString& text) {
+void DialogLabel::DisplayText(const QString& text, bool timeout) {
   text_->setText(QString("<font color=\"white\">%1</font>").arg(text));
   show();
-  QTimer::singleShot(1000, this, &DialogLabel::hide);
+  if (timeout) {
+    timer_->start(2000);
+  }
 }
 
 void DialogLabel::hide() {

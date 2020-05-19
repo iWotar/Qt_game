@@ -20,6 +20,7 @@ class Door : public QGraphicsRectItem {
   void SetFirstScene(SceneBase* scene);
   void SetSecondScene(SceneBase* scene);
   void SetLocation(CityLocation* location);
+  void SetLock(bool);
 
   void SetDirType(DirectionType type);
 
@@ -41,6 +42,8 @@ class Door : public QGraphicsRectItem {
 
   QPoint first_coord_;
   QPoint second_coord_;
+
+  bool is_locked_ = false;
 };
 
 #endif  // DOOR_H

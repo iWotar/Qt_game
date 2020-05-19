@@ -12,6 +12,7 @@
 #include "interactableobject.h"
 #include "inventorylabel.h"
 #include "player.h"
+#include "dialogs_and_notes.h"
 #include "settingsmenu.h"
 #include "gameover.h"
 
@@ -22,6 +23,8 @@ class LocationBase;
 
 enum class CurrentSceneType { MAIN_MENU, GAME_MENU, GAME, SETTINGS };
 
+enum class ActionFlag { HOLE, TABLE, WELL, BASEMENT_FOOD, ENDING };
+
 class GameView : public QGraphicsView {
   Q_OBJECT
 
@@ -29,6 +32,8 @@ class GameView : public QGraphicsView {
   GameView();
 
   void resizeEvent(QResizeEvent* event) override;
+
+  DialogsAndNotes dialog_notes;
 
  public slots:
   void OpenLocation();
@@ -42,6 +47,13 @@ class GameView : public QGraphicsView {
   void MoveInventorySelection(int);
   void ActivateAction();
   void DisplayText(const QString& text);
+  void EndDay();
+
+ private slots:
+  void EndDayImpl();
+
+ public:
+  QMap<ActionFlag, bool> flags_;
 
  protected:
   void wheelEvent(QWheelEvent* event) override;

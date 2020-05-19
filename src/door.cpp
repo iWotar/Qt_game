@@ -20,6 +20,10 @@ Door::Door(Environment* first_part, Environment* second_part,
   second_part_->GetCollisionComponent()->SetObjectType(ObjectType::DOOR);
   first_part_->GetCollisionComponent()->SetParent(this);
   second_part_->GetCollisionComponent()->SetParent(this);
+  first_part_->CustomizeColComp(
+      QVector2D(0, 0), QVector2D(first_part->Width(), first_part->Height()));
+  second_part->CustomizeColComp(
+      QVector2D(0, 0), QVector2D(second_part->Width(), second_part->Height()));
 }
 
 void Door::SetFirstScene(SceneBase* scene) { first_scene_ = scene; }
@@ -34,7 +38,18 @@ Environment* Door::GetSecondPart() const { return second_part_; }
 
 Environment* Door::GetFirstPart() const { return first_part_; }
 
+void Door::SetLock(bool b) {
+  is_locked_ = b;
+  if (b) {
+    first_part_->GetCollisionComponent()->SetCollisionLayer(
+        CollisionLayer::PHYSICS_BODY);
+    second_part_->GetCollisionComponent()->SetCollisionLayer(
+        CollisionLayer::PHYSICS_BODY);
+  }
+}
+
 bool Door::Teleport(Player* player) {
+  if (is_locked_) return false;
   if (player->GetCurScene() == first_scene_ &&
       dir_type_ != DirectionType::SECOND_TO_FIRST) {
     player->MoveToScene(second_scene_);
